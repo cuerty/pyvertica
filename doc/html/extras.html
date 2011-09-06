@@ -1,0 +1,354 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>psycopg2.extras – Miscellaneous goodies for Psycopg 2 &mdash; Psycopg v2.2.1 documentation</title>
+    <link rel="stylesheet" href="_static/psycopg.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '#',
+        VERSION:     '2.2.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Psycopg v2.2.1 documentation" href="index.html" />
+    <link rel="next" title="psycopg2.errorcodes – Error codes defined by PostgreSQL" href="errorcodes.html" />
+    <link rel="prev" title="psycopg2.pool – Connections pooling" href="pool.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="errorcodes.html" title="psycopg2.errorcodes – Error codes defined by PostgreSQL"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="pool.html" title="psycopg2.pool – Connections pooling"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Psycopg v2.2.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-psycopg2.extras">
+<h1><tt class="xref docutils literal"><span class="pre">psycopg2.extras</span></tt> &#8211; Miscellaneous goodies for Psycopg 2<a class="headerlink" href="#module-psycopg2.extras" title="Permalink to this headline">¶</a></h1>
+<p>This module is a generic place used to hold little helper functions and
+classes until a better place in the distribution is found.</p>
+<div class="section" id="dictionary-like-cursor">
+<span id="dict-cursor"></span><span id="index-358"></span><h2>Dictionary-like cursor<a class="headerlink" href="#dictionary-like-cursor" title="Permalink to this headline">¶</a></h2>
+<p>The dict cursors allow to access to the retrieved records using an iterface
+similar to the Python dictionaries instead of the tuples. You can use it
+either passing <a title="psycopg2.extras.DictConnection" class="reference internal" href="#psycopg2.extras.DictConnection"><tt class="xref docutils literal"><span class="pre">DictConnection</span></tt></a> as <tt class="xref docutils literal"><span class="pre">connection_factory</span></tt> argument
+to the <a title="psycopg2.connect" class="reference external" href="module.html#psycopg2.connect"><tt class="xref docutils literal"><span class="pre">connect()</span></tt></a> function or passing <a title="psycopg2.extras.DictCursor" class="reference internal" href="#psycopg2.extras.DictCursor"><tt class="xref docutils literal"><span class="pre">DictCursor</span></tt></a> as
+the <tt class="xref docutils literal"><span class="pre">cursor_factory</span></tt> argument to the <a title="connection.cursor" class="reference external" href="connection.html#connection.cursor"><tt class="xref docutils literal"><span class="pre">cursor()</span></tt></a> method
+of a regular <a title="connection" class="reference external" href="connection.html#connection"><tt class="xref docutils literal"><span class="pre">connection</span></tt></a>.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">dict_cur</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">(</span><span class="n">cursor_factory</span><span class="o">=</span><span class="n">psycopg2</span><span class="o">.</span><span class="n">extras</span><span class="o">.</span><span class="n">DictCursor</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dict_cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;INSERT INTO test (num, data) VALUES(</span><span class="si">%s</span><span class="s">, </span><span class="si">%s</span><span class="s">)&quot;</span><span class="p">,</span>
+<span class="gp">... </span>                 <span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="s">&quot;abc&#39;def&quot;</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dict_cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SELECT * FROM test&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rec</span> <span class="o">=</span> <span class="n">dict_cur</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rec</span><span class="p">[</span><span class="s">&#39;id&#39;</span><span class="p">]</span>
+<span class="go">1</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rec</span><span class="p">[</span><span class="s">&#39;num&#39;</span><span class="p">]</span>
+<span class="go">100</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">rec</span><span class="p">[</span><span class="s">&#39;data&#39;</span><span class="p">]</span>
+<span class="go">&quot;abc&#39;def&quot;</span>
+</pre></div>
+</div>
+<p>The records still support indexing as the original tuple:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">rec</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+<span class="go">&quot;abc&#39;def&quot;</span>
+</pre></div>
+</div>
+<dl class="class">
+<dt id="psycopg2.extras.DictCursor">
+<em class="property">class </em><tt class="descclassname">psycopg2.extras.</tt><tt class="descname">DictCursor</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#psycopg2.extras.DictCursor" title="Permalink to this definition">¶</a></dt>
+<dd>A cursor that keeps a list of column name -&gt; index mappings.</dd></dl>
+
+<dl class="class">
+<dt id="psycopg2.extras.DictConnection">
+<em class="property">class </em><tt class="descclassname">psycopg2.extras.</tt><tt class="descname">DictConnection</tt><a class="headerlink" href="#psycopg2.extras.DictConnection" title="Permalink to this definition">¶</a></dt>
+<dd>A connection that uses <a title="psycopg2.extras.DictCursor" class="reference internal" href="#psycopg2.extras.DictCursor"><tt class="xref docutils literal"><span class="pre">DictCursor</span></tt></a> automatically.</dd></dl>
+
+<dl class="class">
+<dt id="psycopg2.extras.DictRow">
+<em class="property">class </em><tt class="descclassname">psycopg2.extras.</tt><tt class="descname">DictRow</tt><big>(</big><em>cursor</em><big>)</big><a class="headerlink" href="#psycopg2.extras.DictRow" title="Permalink to this definition">¶</a></dt>
+<dd>A row object that allow by-colmun-name access to data.</dd></dl>
+
+<div class="section" id="real-dictionary-cursor">
+<h3>Real dictionary cursor<a class="headerlink" href="#real-dictionary-cursor" title="Permalink to this headline">¶</a></h3>
+<dl class="class">
+<dt id="psycopg2.extras.RealDictCursor">
+<em class="property">class </em><tt class="descclassname">psycopg2.extras.</tt><tt class="descname">RealDictCursor</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#psycopg2.extras.RealDictCursor" title="Permalink to this definition">¶</a></dt>
+<dd><p>A cursor that uses a real dict as the base type for rows.</p>
+<p>Note that this cursor is extremely specialized and does not allow
+the normal access (using integer indices) to fetched data. If you need
+to access database rows both as a dictionary and a list, then use
+the generic <a title="psycopg2.extras.DictCursor" class="reference internal" href="#psycopg2.extras.DictCursor"><tt class="xref docutils literal"><span class="pre">DictCursor</span></tt></a> instead of <tt class="xref docutils literal"><span class="pre">RealDictCursor</span></tt>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="psycopg2.extras.RealDictConnection">
+<em class="property">class </em><tt class="descclassname">psycopg2.extras.</tt><tt class="descname">RealDictConnection</tt><a class="headerlink" href="#psycopg2.extras.RealDictConnection" title="Permalink to this definition">¶</a></dt>
+<dd>A connection that uses <a title="psycopg2.extras.RealDictCursor" class="reference internal" href="#psycopg2.extras.RealDictCursor"><tt class="xref docutils literal"><span class="pre">RealDictCursor</span></tt></a> automatically.</dd></dl>
+
+<dl class="class">
+<dt id="psycopg2.extras.RealDictRow">
+<em class="property">class </em><tt class="descclassname">psycopg2.extras.</tt><tt class="descname">RealDictRow</tt><big>(</big><em>cursor</em><big>)</big><a class="headerlink" href="#psycopg2.extras.RealDictRow" title="Permalink to this definition">¶</a></dt>
+<dd>A <tt class="docutils literal"><span class="pre">dict</span></tt> subclass representing a data record.</dd></dl>
+
+</div>
+</div>
+<div class="section" id="logging-cursor">
+<span id="index-359"></span><h2>Logging cursor<a class="headerlink" href="#logging-cursor" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="psycopg2.extras.LoggingConnection">
+<em class="property">class </em><tt class="descclassname">psycopg2.extras.</tt><tt class="descname">LoggingConnection</tt><a class="headerlink" href="#psycopg2.extras.LoggingConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p>A connection that logs all queries to a file or <a class="reference external" href="http://docs.python.org/library/logging.html">logger</a> object.</p>
+<dl class="method">
+<dt id="psycopg2.extras.LoggingConnection.initialize">
+<tt class="descname">initialize</tt><big>(</big><em>logobj</em><big>)</big><a class="headerlink" href="#psycopg2.extras.LoggingConnection.initialize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the connection to log to <tt class="docutils literal"><span class="pre">logobj</span></tt>.</p>
+<p>The <tt class="docutils literal"><span class="pre">logobj</span></tt> parameter can be an open file object or a Logger
+instance from the standard logging module.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="psycopg2.extras.LoggingConnection.filter">
+<tt class="descname">filter</tt><big>(</big><em>msg</em>, <em>curs</em><big>)</big><a class="headerlink" href="#psycopg2.extras.LoggingConnection.filter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Filter the query before logging it.</p>
+<p>This is the method to overwrite to filter unwanted queries out of the
+log or to add some extra data to the output. The default implementation
+just does nothing.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="psycopg2.extras.LoggingCursor">
+<em class="property">class </em><tt class="descclassname">psycopg2.extras.</tt><tt class="descname">LoggingCursor</tt><a class="headerlink" href="#psycopg2.extras.LoggingCursor" title="Permalink to this definition">¶</a></dt>
+<dd>A cursor that logs queries using its connection logging facilities.</dd></dl>
+
+<dl class="class">
+<dt id="psycopg2.extras.MinTimeLoggingConnection">
+<em class="property">class </em><tt class="descclassname">psycopg2.extras.</tt><tt class="descname">MinTimeLoggingConnection</tt><a class="headerlink" href="#psycopg2.extras.MinTimeLoggingConnection" title="Permalink to this definition">¶</a></dt>
+<dd><p>A connection that logs queries based on execution time.</p>
+<p>This is just an example of how to sub-class <a title="psycopg2.extras.LoggingConnection" class="reference internal" href="#psycopg2.extras.LoggingConnection"><tt class="xref docutils literal"><span class="pre">LoggingConnection</span></tt></a> to
+provide some extra filtering for the logged queries. Both the
+<tt class="xref docutils literal"><span class="pre">inizialize()</span></tt> and <tt class="xref docutils literal"><span class="pre">filter()</span></tt> methods are overwritten to make sure
+that only queries executing for more than <tt class="docutils literal"><span class="pre">mintime</span></tt> ms are logged.</p>
+<p>Note that this connection uses the specialized cursor
+<a title="psycopg2.extras.MinTimeLoggingCursor" class="reference internal" href="#psycopg2.extras.MinTimeLoggingCursor"><tt class="xref docutils literal"><span class="pre">MinTimeLoggingCursor</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="psycopg2.extras.MinTimeLoggingCursor">
+<em class="property">class </em><tt class="descclassname">psycopg2.extras.</tt><tt class="descname">MinTimeLoggingCursor</tt><a class="headerlink" href="#psycopg2.extras.MinTimeLoggingCursor" title="Permalink to this definition">¶</a></dt>
+<dd>The cursor sub-class companion to <a title="psycopg2.extras.MinTimeLoggingConnection" class="reference internal" href="#psycopg2.extras.MinTimeLoggingConnection"><tt class="xref docutils literal"><span class="pre">MinTimeLoggingConnection</span></tt></a>.</dd></dl>
+
+</div>
+<div class="section" id="uuid-data-type">
+<span id="index-360"></span><h2>UUID data type<a class="headerlink" href="#uuid-data-type" title="Permalink to this headline">¶</a></h2>
+<p>
+<span class="versionmodified">New in version 2.0.9.</span></p>
+<p>
+<span class="versionmodified">Changed in version 2.0.13: </span>added UUID array support.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">psycopg2</span><span class="o">.</span><span class="n">extras</span><span class="o">.</span><span class="n">register_uuid</span><span class="p">()</span>
+<span class="go">&lt;psycopg2._psycopg.type object at 0x...&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># Python UUID can be used in SQL queries</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">uuid</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">my_uuid</span> <span class="o">=</span> <span class="n">uuid</span><span class="o">.</span><span class="n">UUID</span><span class="p">(</span><span class="s">&#39;{12345678-1234-5678-1234-567812345678}&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">psycopg2</span><span class="o">.</span><span class="n">extensions</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span><span class="n">my_uuid</span><span class="p">)</span><span class="o">.</span><span class="n">getquoted</span><span class="p">()</span>
+<span class="go">&quot;&#39;12345678-1234-5678-1234-567812345678&#39;::uuid&quot;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="c"># PostgreSQL UUID are transformed into Python UUID objects.</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SELECT &#39;a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11&#39;::uuid&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cur</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+<span class="go">UUID(&#39;a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11&#39;)</span>
+</pre></div>
+</div>
+<dl class="function">
+<dt id="psycopg2.extras.register_uuid">
+<tt class="descclassname">psycopg2.extras.</tt><tt class="descname">register_uuid</tt><big>(</big><em>oids=None</em>, <em>conn_or_curs=None</em><big>)</big><a class="headerlink" href="#psycopg2.extras.register_uuid" title="Permalink to this definition">¶</a></dt>
+<dd>Create the UUID type and an uuid.UUID adapter.</dd></dl>
+
+<dl class="class">
+<dt id="psycopg2.extras.UUID_adapter">
+<em class="property">class </em><tt class="descclassname">psycopg2.extras.</tt><tt class="descname">UUID_adapter</tt><big>(</big><em>uuid</em><big>)</big><a class="headerlink" href="#psycopg2.extras.UUID_adapter" title="Permalink to this definition">¶</a></dt>
+<dd>Adapt Python&#8217;s <a class="reference external" href="http://docs.python.org/library/uuid.html">uuid.UUID</a> type to PostgreSQL&#8217;s <a class="reference external" href="http://www.postgresql.org/docs/8.4/static/datatype-uuid.html">uuid</a>.</dd></dl>
+
+</div>
+<div class="section" id="inet-data-type">
+<span id="index-361"></span><h2><tt class="sql docutils literal"><span class="pre">inet</span></tt> data type<a class="headerlink" href="#inet-data-type" title="Permalink to this headline">¶</a></h2>
+<p>
+<span class="versionmodified">New in version 2.0.9.</span></p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">psycopg2</span><span class="o">.</span><span class="n">extras</span><span class="o">.</span><span class="n">register_inet</span><span class="p">()</span>
+<span class="go">&lt;psycopg2._psycopg.type object at 0x...&gt;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cur</span><span class="o">.</span><span class="n">mogrify</span><span class="p">(</span><span class="s">&quot;SELECT </span><span class="si">%s</span><span class="s">&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">Inet</span><span class="p">(</span><span class="s">&#39;127.0.0.1/32&#39;</span><span class="p">),))</span>
+<span class="go">&quot;SELECT E&#39;127.0.0.1/32&#39;::inet&quot;</span>
+
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;SELECT &#39;192.168.0.1/24&#39;::inet&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cur</span><span class="o">.</span><span class="n">fetchone</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">addr</span>
+<span class="go">&#39;192.168.0.1/24&#39;</span>
+</pre></div>
+</div>
+<dl class="function">
+<dt id="psycopg2.extras.register_inet">
+<tt class="descclassname">psycopg2.extras.</tt><tt class="descname">register_inet</tt><big>(</big><big>)</big><a class="headerlink" href="#psycopg2.extras.register_inet" title="Permalink to this definition">¶</a></dt>
+<dd>Create the INET type and an Inet adapter.</dd></dl>
+
+<dl class="class">
+<dt id="psycopg2.extras.Inet">
+<em class="property">class </em><tt class="descclassname">psycopg2.extras.</tt><tt class="descname">Inet</tt><big>(</big><em>addr</em><big>)</big><a class="headerlink" href="#psycopg2.extras.Inet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrap a string to allow for correct SQL-quoting of inet values.</p>
+<p>Note that this adapter does NOT check the passed value to make
+sure it really is an inet-compatible address but DOES call adapt()
+on it to make sure it is impossible to execute an SQL-injection
+by passing an evil value to the initializer.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="fractional-time-zones">
+<span id="index-362"></span><h2>Fractional time zones<a class="headerlink" href="#fractional-time-zones" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="psycopg2.extras.register_tstz_w_secs">
+<tt class="descclassname">psycopg2.extras.</tt><tt class="descname">register_tstz_w_secs</tt><big>(</big><em>oids=None</em>, <em>conn_or_curs=None</em><big>)</big><a class="headerlink" href="#psycopg2.extras.register_tstz_w_secs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register alternate type caster for <tt class="sql docutils literal"><span class="pre">TIMESTAMP</span> <span class="pre">WITH</span> <span class="pre">TIME</span> <span class="pre">ZONE</span></tt>.</p>
+<p>The Python datetime module cannot handle time zones with
+seconds in the UTC offset. There are, however, historical
+&#8220;time zones&#8221; which contain such offsets, eg. &#8220;Asia/Calcutta&#8221;.
+In many cases those offsets represent true local time.</p>
+<p>If you encounter &#8220;unable to parse time&#8221; on a perfectly valid
+timestamp you likely want to try this type caster. It truncates
+the seconds from the time zone data and retries casting
+the timestamp. Note that this will generate timestamps
+which are <strong>inaccurate</strong> by the number of seconds truncated
+(unless the seconds were 00).</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>oids</em> &#8211; which OIDs to use this type caster for,
+defaults to <tt class="sql docutils literal"><span class="pre">TIMESTAMP</span> <span class="pre">WITH</span> <span class="pre">TIME</span> <span class="pre">ZONE</span></tt></li>
+<li><em>conn_or_curs</em> &#8211; a cursor or connection if you want to attach
+this type caster to that only, defaults to
+<tt class="xref docutils literal"><span class="pre">None</span></tt> meaning all connections and cursors</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>
+<span class="versionmodified">New in version 2.0.9.</span></p>
+</dd></dl>
+
+</div>
+<div class="section" id="coroutine-support">
+<span id="index-363"></span><h2>Coroutine support<a class="headerlink" href="#coroutine-support" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="psycopg2.extras.wait_select">
+<tt class="descclassname">psycopg2.extras.</tt><tt class="descname">wait_select</tt><big>(</big><em>conn</em><big>)</big><a class="headerlink" href="#psycopg2.extras.wait_select" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wait until a connection or cursor has data available.</p>
+<p>The function is an example of a wait callback to be registered with
+<a title="psycopg2.extensions.set_wait_callback" class="reference external" href="extensions.html#psycopg2.extensions.set_wait_callback"><tt class="xref docutils literal"><span class="pre">set_wait_callback()</span></tt></a>. This function uses <tt class="xref docutils literal"><span class="pre">select()</span></tt>
+to wait for data available.</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#"><tt class="docutils literal"><span class="pre">psycopg2.extras</span></tt> &#8211; Miscellaneous goodies for Psycopg 2</a><ul>
+<li><a class="reference external" href="#dictionary-like-cursor">Dictionary-like cursor</a><ul>
+<li><a class="reference external" href="#real-dictionary-cursor">Real dictionary cursor</a></li>
+</ul>
+</li>
+<li><a class="reference external" href="#logging-cursor">Logging cursor</a></li>
+<li><a class="reference external" href="#uuid-data-type">UUID data type</a></li>
+<li><a class="reference external" href="#inet-data-type"><tt class="sql docutils literal"><span class="pre">inet</span></tt> data type</a></li>
+<li><a class="reference external" href="#fractional-time-zones">Fractional time zones</a></li>
+<li><a class="reference external" href="#coroutine-support">Coroutine support</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="pool.html"
+                                  title="previous chapter"><tt class="docutils literal"><span class="pre">psycopg2.pool</span></tt> &#8211; Connections pooling</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="errorcodes.html"
+                                  title="next chapter"><tt class="docutils literal docutils literal"><span class="pre">psycopg2.errorcodes</span></tt> &#8211; Error codes defined by PostgreSQL</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/extras.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="errorcodes.html" title="psycopg2.errorcodes – Error codes defined by PostgreSQL"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="pool.html" title="psycopg2.pool – Connections pooling"
+             >previous</a> |</li>
+        <li><a href="index.html">Psycopg v2.2.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2001-2010, Federico Di Gregorio. Documentation by Daniele Varrazzo.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.5.
+    </div>
+  </body>
+</html>

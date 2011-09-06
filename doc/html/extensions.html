@@ -1,0 +1,743 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>psycopg2.extensions – Extensions to the DB API &mdash; Psycopg v2.2.1 documentation</title>
+    <link rel="stylesheet" href="_static/psycopg.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '#',
+        VERSION:     '2.2.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Psycopg v2.2.1 documentation" href="index.html" />
+    <link rel="next" title="psycopg2.tz – tzinfo implementations for Psycopg 2" href="tz.html" />
+    <link rel="prev" title="More advanced topics" href="advanced.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="tz.html" title="psycopg2.tz – tzinfo implementations for Psycopg 2"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="advanced.html" title="More advanced topics"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Psycopg v2.2.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="module-psycopg2.extensions">
+<h1><tt class="xref docutils literal"><span class="pre">psycopg2.extensions</span></tt> &#8211; Extensions to the DB API<a class="headerlink" href="#module-psycopg2.extensions" title="Permalink to this headline">¶</a></h1>
+<p>The module contains a few objects and function extending the minimum set of
+functionalities defined by the <a class="reference external" href="http://www.python.org/dev/peps/pep-0249/">DB API 2.0</a>.</p>
+<dl class="class">
+<dt id="psycopg2.extensions.connection">
+<em class="property">class </em><tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">connection</tt><a class="headerlink" href="#psycopg2.extensions.connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is the class usually returned by the <a title="psycopg2.connect" class="reference external" href="module.html#psycopg2.connect"><tt class="xref docutils literal"><span class="pre">connect()</span></tt></a> function.
+It is exposed by the <tt class="xref docutils literal"><span class="pre">extensions</span></tt> module in order to allow
+subclassing to extend its behaviour: the subclass should be passed to the
+<tt class="xref docutils literal"><span class="pre">connect()</span></tt> function using the <tt class="xref docutils literal"><span class="pre">connection_factory</span></tt> parameter.
+See also <a class="reference external" href="advanced.html#subclassing-connection"><em>Connection and cursor factories</em></a>.</p>
+<p>Subclasses should have constructor signature <tt class="docutils literal"><span class="pre">(</span><em><span class="pre">dsn</span></em><span class="pre">,</span> <em><span class="pre">async</span></em><span class="pre">=0)</span></tt>.</p>
+<p>For a complete description of the class, see <a title="connection" class="reference external" href="connection.html#connection"><tt class="xref docutils literal"><span class="pre">connection</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="psycopg2.extensions.cursor">
+<em class="property">class </em><tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">cursor</tt><a class="headerlink" href="#psycopg2.extensions.cursor" title="Permalink to this definition">¶</a></dt>
+<dd><p>It is the class usually returnded by the <a title="connection.cursor" class="reference external" href="connection.html#connection.cursor"><tt class="xref docutils literal"><span class="pre">connection.cursor()</span></tt></a>
+method. It is exposed by the <tt class="xref docutils literal"><span class="pre">extensions</span></tt> module in order to allow
+subclassing to extend its behaviour: the subclass should be passed to the
+<tt class="xref docutils literal"><span class="pre">cursor()</span></tt> method using the <tt class="xref docutils literal"><span class="pre">cursor_factory</span></tt> parameter. See
+also <a class="reference external" href="advanced.html#subclassing-cursor"><em>Connection and cursor factories</em></a>.</p>
+<p>For a complete description of the class, see <a title="cursor" class="reference external" href="cursor.html#cursor"><tt class="xref docutils literal"><span class="pre">cursor</span></tt></a>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="psycopg2.extensions.lobject">
+<em class="property">class </em><tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">lobject</tt><big>(</big><em>conn</em><span class="optional">[</span>, <em>oid</em><span class="optional">[</span>, <em>mode</em><span class="optional">[</span>, <em>new_oid</em><span class="optional">[</span>, <em>new_file</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#psycopg2.extensions.lobject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapper for a PostgreSQL large object. See <a class="reference external" href="usage.html#large-objects"><em>Access to PostgreSQL large objects</em></a> for an
+overview.</p>
+<p>The class can be subclassed: see the <a title="connection.lobject" class="reference external" href="connection.html#connection.lobject"><tt class="xref docutils literal"><span class="pre">connection.lobject()</span></tt></a> to know
+how to specify a <tt class="xref docutils literal"><span class="pre">lobject</span></tt> subclass.</p>
+<p>
+<span class="versionmodified">New in version 2.0.8.</span></p>
+<dl class="attribute">
+<dt id="psycopg2.extensions.lobject.oid">
+<tt class="descname">oid</tt><a class="headerlink" href="#psycopg2.extensions.lobject.oid" title="Permalink to this definition">¶</a></dt>
+<dd>Database OID of the object.</dd></dl>
+
+<dl class="attribute">
+<dt id="psycopg2.extensions.lobject.mode">
+<tt class="descname">mode</tt><a class="headerlink" href="#psycopg2.extensions.lobject.mode" title="Permalink to this definition">¶</a></dt>
+<dd>The mode the database was open (<tt class="docutils literal"><span class="pre">r</span></tt>, <tt class="docutils literal"><span class="pre">w</span></tt>, <tt class="docutils literal"><span class="pre">rw</span></tt> or <tt class="docutils literal"><span class="pre">n</span></tt>).</dd></dl>
+
+<dl class="method">
+<dt id="psycopg2.extensions.lobject.read">
+<tt class="descname">read</tt><big>(</big><em>bytes=-1</em><big>)</big><a class="headerlink" href="#psycopg2.extensions.lobject.read" title="Permalink to this definition">¶</a></dt>
+<dd>Read a chunk of data from the current file position. If -1 (default)
+read all the remaining data.</dd></dl>
+
+<dl class="method">
+<dt id="psycopg2.extensions.lobject.write">
+<tt class="descname">write</tt><big>(</big><em>str</em><big>)</big><a class="headerlink" href="#psycopg2.extensions.lobject.write" title="Permalink to this definition">¶</a></dt>
+<dd>Write a string to the large object. Return the number of bytes
+written.</dd></dl>
+
+<dl class="method">
+<dt id="psycopg2.extensions.lobject.export">
+<tt class="descname">export</tt><big>(</big><em>file_name</em><big>)</big><a class="headerlink" href="#psycopg2.extensions.lobject.export" title="Permalink to this definition">¶</a></dt>
+<dd><p>Export the large object content to the file system.</p>
+<p>The method uses the efficient <a class="reference external" href="http://www.postgresql.org/docs/8.4/static/lo-interfaces.html#AEN36330"><tt class="xref docutils literal"><span class="pre">lo_export()</span></tt></a> libpq function.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="psycopg2.extensions.lobject.seek">
+<tt class="descname">seek</tt><big>(</big><em>offset</em>, <em>whence=0</em><big>)</big><a class="headerlink" href="#psycopg2.extensions.lobject.seek" title="Permalink to this definition">¶</a></dt>
+<dd>Set the lobject current position.</dd></dl>
+
+<dl class="method">
+<dt id="psycopg2.extensions.lobject.tell">
+<tt class="descname">tell</tt><big>(</big><big>)</big><a class="headerlink" href="#psycopg2.extensions.lobject.tell" title="Permalink to this definition">¶</a></dt>
+<dd>Return the lobject current position.</dd></dl>
+
+<dl class="method">
+<dt id="psycopg2.extensions.lobject.truncate">
+<tt class="descname">truncate</tt><big>(</big><em>len=0</em><big>)</big><a class="headerlink" href="#psycopg2.extensions.lobject.truncate" title="Permalink to this definition">¶</a></dt>
+<dd><p>
+<span class="versionmodified">New in version 2.2.0.</span></p>
+<p>Truncate the lobject to the given size.</p>
+<p>The method will only be available if Psycopg has been built against libpq
+from PostgreSQL 8.3 or later and can only be used with PostgreSQL servers
+running these versions. It uses the <a class="reference external" href="http://www.postgresql.org/docs/8.4/static/lo-interfaces.html#AEN36420"><tt class="xref docutils literal"><span class="pre">lo_truncate()</span></tt></a> libpq function.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="psycopg2.extensions.lobject.close">
+<tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#psycopg2.extensions.lobject.close" title="Permalink to this definition">¶</a></dt>
+<dd>Close the object.</dd></dl>
+
+<dl class="attribute">
+<dt id="psycopg2.extensions.lobject.closed">
+<tt class="descname">closed</tt><a class="headerlink" href="#psycopg2.extensions.lobject.closed" title="Permalink to this definition">¶</a></dt>
+<dd>Boolean attribute specifying if the object is closed.</dd></dl>
+
+<dl class="method">
+<dt id="psycopg2.extensions.lobject.unlink">
+<tt class="descname">unlink</tt><big>(</big><big>)</big><a class="headerlink" href="#psycopg2.extensions.lobject.unlink" title="Permalink to this definition">¶</a></dt>
+<dd>Close the object and remove it from the database.</dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="psycopg2.extensions.set_wait_callback">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">set_wait_callback</tt><big>(</big><em>f</em><big>)</big><a class="headerlink" href="#psycopg2.extensions.set_wait_callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a callback function to block waiting for data.</p>
+<p>The callback should have signature <tt class="docutils literal"><span class="pre">fun(</span><em><span class="pre">conn</span></em><span class="pre">)</span></tt> and
+is called to wait for data available whenever a blocking function from the
+libpq is called.  Use <tt class="xref docutils literal"><span class="pre">set_wait_callback(None)</span></tt> to revert to the
+original behaviour (i.e. using blocking libpq functions).</p>
+<p>The function is an hook to allow coroutine-based libraries (such as
+<a class="reference external" href="http://eventlet.net/">Eventlet</a> or <a class="reference external" href="http://www.gevent.org/">gevent</a>) to switch when Psycopg is blocked, allowing
+other coroutines to run concurrently.</p>
+<p>See <a title="psycopg2.extras.wait_select" class="reference external" href="extras.html#psycopg2.extras.wait_select"><tt class="xref docutils literal"><span class="pre">wait_select()</span></tt></a> for an example of a wait callback
+implementation.</p>
+<p>
+<span class="versionmodified">New in version 2.2.0.</span></p>
+</dd></dl>
+
+<dl class="function">
+<dt id="psycopg2.extensions.get_wait_callback">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">get_wait_callback</tt><big>(</big><big>)</big><a class="headerlink" href="#psycopg2.extensions.get_wait_callback" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the currently registered wait callback.</p>
+<p>Return <tt class="xref xref docutils literal"><span class="pre">None</span></tt> if no callback is currently registered.</p>
+<p>
+<span class="versionmodified">New in version 2.2.0.</span></p>
+</dd></dl>
+
+<div class="section" id="sql-adaptation-protocol-objects">
+<span id="sql-adaptation-objects"></span><h2>SQL adaptation protocol objects<a class="headerlink" href="#sql-adaptation-protocol-objects" title="Permalink to this headline">¶</a></h2>
+<p>Psycopg provides a flexible system to adapt Python objects to the SQL syntax
+(inspired to the <span class="target" id="index-351"></span><a class="reference external" href="http://www.python.org/dev/peps/pep-0246"><strong>PEP 246</strong></a>), allowing serialization in PostgreSQL. See
+<a class="reference external" href="advanced.html#adapting-new-types"><em>Adapting new Python types to SQL syntax</em></a> for a detailed description.  The following objects
+deal with Python objects adaptation:</p>
+<dl class="function">
+<dt id="psycopg2.extensions.adapt">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">adapt</tt><big>(</big><em>obj</em><big>)</big><a class="headerlink" href="#psycopg2.extensions.adapt" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the SQL representation of <em>obj</em> as a string.  Raise a
+<a title="psycopg2.ProgrammingError" class="reference external" href="module.html#psycopg2.ProgrammingError"><tt class="xref docutils literal"><span class="pre">ProgrammingError</span></tt></a> if how to adapt the object is unknown.
+In order to allow new objects to be adapted, register a new adapter for it
+using the <a title="psycopg2.extensions.register_adapter" class="reference internal" href="#psycopg2.extensions.register_adapter"><tt class="xref docutils literal"><span class="pre">register_adapter()</span></tt></a> function.</p>
+<p>The function is the entry point of the adaptation mechanism: it can be
+used to write adapters for complex objects by recursively calling
+<tt class="xref docutils literal"><span class="pre">adapt()</span></tt> on its components.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="psycopg2.extensions.register_adapter">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">register_adapter</tt><big>(</big><em>class</em>, <em>adapter</em><big>)</big><a class="headerlink" href="#psycopg2.extensions.register_adapter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a new adapter for the objects of class <em>class</em>.</p>
+<p><em>adapter</em> should be a function taking a single argument (the object
+to adapt) and returning an object conforming the <a title="psycopg2.extensions.ISQLQuote" class="reference internal" href="#psycopg2.extensions.ISQLQuote"><tt class="xref docutils literal"><span class="pre">ISQLQuote</span></tt></a>
+protocol (e.g. exposing a <tt class="xref docutils literal"><span class="pre">getquoted()</span></tt> method).  The <a title="psycopg2.extensions.AsIs" class="reference internal" href="#psycopg2.extensions.AsIs"><tt class="xref docutils literal"><span class="pre">AsIs</span></tt></a> is
+often useful for this task.</p>
+<p>Once an object is registered, it can be safely used in SQL queries and by
+the <a title="psycopg2.extensions.adapt" class="reference internal" href="#psycopg2.extensions.adapt"><tt class="xref docutils literal"><span class="pre">adapt()</span></tt></a> function.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="psycopg2.extensions.ISQLQuote">
+<em class="property">class </em><tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">ISQLQuote</tt><big>(</big><em>wrapped_object</em><big>)</big><a class="headerlink" href="#psycopg2.extensions.ISQLQuote" title="Permalink to this definition">¶</a></dt>
+<dd><p>Represents the SQL adaptation protocol.  Objects conforming this protocol
+should implement a <tt class="xref docutils literal"><span class="pre">getquoted()</span></tt> method.</p>
+<p>Adapters may subclass <tt class="xref docutils literal"><span class="pre">ISQLQuote</span></tt>, but is not necessary: it is
+enough to expose a <tt class="xref docutils literal"><span class="pre">getquoted()</span></tt> method to be conforming.</p>
+<dl class="attribute">
+<dt id="psycopg2.extensions.ISQLQuote._wrapped">
+<tt class="descname">_wrapped</tt><a class="headerlink" href="#psycopg2.extensions.ISQLQuote._wrapped" title="Permalink to this definition">¶</a></dt>
+<dd>The wrapped object passes to the constructor</dd></dl>
+
+<dl class="method">
+<dt id="psycopg2.extensions.ISQLQuote.getquoted">
+<tt class="descname">getquoted</tt><big>(</big><big>)</big><a class="headerlink" href="#psycopg2.extensions.ISQLQuote.getquoted" title="Permalink to this definition">¶</a></dt>
+<dd>Subclasses or other conforming objects should return a valid SQL
+string representing the wrapped object. The <tt class="xref docutils literal"><span class="pre">ISQLQuote</span></tt>
+implementation does nothing.</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="psycopg2.extensions.AsIs">
+<em class="property">class </em><tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">AsIs</tt><a class="headerlink" href="#psycopg2.extensions.AsIs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adapter conform to the <a title="psycopg2.extensions.ISQLQuote" class="reference internal" href="#psycopg2.extensions.ISQLQuote"><tt class="xref docutils literal"><span class="pre">ISQLQuote</span></tt></a> protocol useful for objects
+whose string representation is already valid as SQL representation.</p>
+<dl class="method">
+<dt id="psycopg2.extensions.AsIs.getquoted">
+<tt class="descname">getquoted</tt><big>(</big><big>)</big><a class="headerlink" href="#psycopg2.extensions.AsIs.getquoted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <tt class="xref docutils literal"><span class="pre">str()</span></tt> conversion of the wrapped object.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">AsIs</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span><span class="o">.</span><span class="n">getquoted</span><span class="p">()</span>
+<span class="go">&#39;42&#39;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="psycopg2.extensions.QuotedString">
+<em class="property">class </em><tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">QuotedString</tt><a class="headerlink" href="#psycopg2.extensions.QuotedString" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adapter conform to the <a title="psycopg2.extensions.ISQLQuote" class="reference internal" href="#psycopg2.extensions.ISQLQuote"><tt class="xref docutils literal"><span class="pre">ISQLQuote</span></tt></a> protocol for string-like
+objects.</p>
+<dl class="method">
+<dt id="psycopg2.extensions.QuotedString.getquoted">
+<tt class="descname">getquoted</tt><big>(</big><big>)</big><a class="headerlink" href="#psycopg2.extensions.QuotedString.getquoted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the string enclosed in single quotes.  Any single quote
+appearing in the the string is escaped by doubling it according to SQL
+string constants syntax.  Backslashes are escaped too.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">QuotedString</span><span class="p">(</span><span class="s">r&quot;O&#39;Reilly&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getquoted</span><span class="p">()</span>
+<span class="go">&quot;&#39;O&#39;&#39;Reilly&#39;&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="psycopg2.extensions.Binary">
+<em class="property">class </em><tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">Binary</tt><a class="headerlink" href="#psycopg2.extensions.Binary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Adapter conform to the <a title="psycopg2.extensions.ISQLQuote" class="reference internal" href="#psycopg2.extensions.ISQLQuote"><tt class="xref docutils literal"><span class="pre">ISQLQuote</span></tt></a> protocol for binary objects.</p>
+<dl class="method">
+<dt id="psycopg2.extensions.Binary.getquoted">
+<tt class="descname">getquoted</tt><big>(</big><big>)</big><a class="headerlink" href="#psycopg2.extensions.Binary.getquoted" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the string enclosed in single quotes.  It performs the same
+escaping of the <a title="psycopg2.extensions.QuotedString" class="reference internal" href="#psycopg2.extensions.QuotedString"><tt class="xref docutils literal"><span class="pre">QuotedString</span></tt></a> adapter, plus it knows how to
+escape non-printable chars.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Binary</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\x00\x08\x0F</span><span class="s">&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">getquoted</span><span class="p">()</span>
+<span class="go">&quot;&#39;\\\\000\\\\010\\\\017&#39;&quot;</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<p>
+<span class="versionmodified">Changed in version 2.0.14: </span>previously the adapter was not exposed by the <tt class="xref docutils literal"><span class="pre">extensions</span></tt>
+module. In older versions it can be imported from the implementation
+module <tt class="xref docutils literal"><span class="pre">psycopg2._psycopg</span></tt>.</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="psycopg2.extensions.Boolean">
+<em class="property">class </em><tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">Boolean</tt><a class="headerlink" href="#psycopg2.extensions.Boolean" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.Float">
+<em class="property">class </em><tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">Float</tt><a class="headerlink" href="#psycopg2.extensions.Float" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.SQL_IN">
+<em class="property">class </em><tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">SQL_IN</tt><a class="headerlink" href="#psycopg2.extensions.SQL_IN" title="Permalink to this definition">¶</a></dt>
+<dd>Specialized adapters for builtin objects.</dd></dl>
+
+<dl class="class">
+<dt id="psycopg2.extensions.DateFromPy">
+<em class="property">class </em><tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">DateFromPy</tt><a class="headerlink" href="#psycopg2.extensions.DateFromPy" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.TimeFromPy">
+<em class="property">class </em><tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">TimeFromPy</tt><a class="headerlink" href="#psycopg2.extensions.TimeFromPy" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.TimestampFromPy">
+<em class="property">class </em><tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">TimestampFromPy</tt><a class="headerlink" href="#psycopg2.extensions.TimestampFromPy" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.IntervalFromPy">
+<em class="property">class </em><tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">IntervalFromPy</tt><a class="headerlink" href="#psycopg2.extensions.IntervalFromPy" title="Permalink to this definition">¶</a></dt>
+<dd>Specialized adapters for Python datetime objects.</dd></dl>
+
+<dl class="class">
+<dt id="psycopg2.extensions.DateFromMx">
+<em class="property">class </em><tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">DateFromMx</tt><a class="headerlink" href="#psycopg2.extensions.DateFromMx" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.TimeFromMx">
+<em class="property">class </em><tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">TimeFromMx</tt><a class="headerlink" href="#psycopg2.extensions.TimeFromMx" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.TimestampFromMx">
+<em class="property">class </em><tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">TimestampFromMx</tt><a class="headerlink" href="#psycopg2.extensions.TimestampFromMx" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.IntervalFromMx">
+<em class="property">class </em><tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">IntervalFromMx</tt><a class="headerlink" href="#psycopg2.extensions.IntervalFromMx" title="Permalink to this definition">¶</a></dt>
+<dd>Specialized adapters for <a class="reference external" href="http://www.egenix.com/products/python/mxBase/mxDateTime/">mx.DateTime</a> objects.</dd></dl>
+
+<dl class="data">
+<dt id="psycopg2.extensions.adapters">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">adapters</tt><a class="headerlink" href="#psycopg2.extensions.adapters" title="Permalink to this definition">¶</a></dt>
+<dd>Dictionary of the currently registered object adapters.  Use
+<a title="psycopg2.extensions.register_adapter" class="reference internal" href="#psycopg2.extensions.register_adapter"><tt class="xref docutils literal"><span class="pre">register_adapter()</span></tt></a> to add an adapter for a new type.</dd></dl>
+
+</div>
+<div class="section" id="database-types-casting-functions">
+<h2>Database types casting functions<a class="headerlink" href="#database-types-casting-functions" title="Permalink to this headline">¶</a></h2>
+<p>These functions are used to manipulate type casters to convert from PostgreSQL
+types to Python objects.  See <a class="reference external" href="advanced.html#type-casting-from-sql-to-python"><em>Type casting of SQL types into Python objects</em></a> for
+details.</p>
+<dl class="function">
+<dt id="psycopg2.extensions.new_type">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">new_type</tt><big>(</big><em>oids</em>, <em>name</em>, <em>adapter</em><big>)</big><a class="headerlink" href="#psycopg2.extensions.new_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new type caster to convert from a PostgreSQL type to a Python
+object.  The created object must be registered using
+<a title="psycopg2.extensions.register_type" class="reference internal" href="#psycopg2.extensions.register_type"><tt class="xref docutils literal"><span class="pre">register_type()</span></tt></a> to be used.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><em>oids</em> &#8211; tuple of OIDs of the PostgreSQL type to convert.</li>
+<li><em>name</em> &#8211; the name of the new type adapter.</li>
+<li><em>adapter</em> &#8211; the adaptation function.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>The object OID can be read from the <a title="cursor.description" class="reference external" href="cursor.html#cursor.description"><tt class="xref docutils literal"><span class="pre">cursor.description</span></tt></a> attribute
+or by querying from the PostgreSQL catalog.</p>
+<p><em>adapter</em> should have signature <tt class="docutils literal"><span class="pre">fun(</span><em><span class="pre">value</span></em><span class="pre">,</span> <em><span class="pre">cur</span></em><span class="pre">)</span></tt> where
+<em>value</em> is the string representation returned by PostgreSQL and
+<em>cur</em> is the cursor from which data are read. In case of
+<tt class="sql docutils literal"><span class="pre">NULL</span></tt>, <em>value</em> will be <tt class="xref docutils literal"><span class="pre">None</span></tt>. The adapter should return the
+converted object.</p>
+<p>See <a class="reference external" href="advanced.html#type-casting-from-sql-to-python"><em>Type casting of SQL types into Python objects</em></a> for an usage example.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="psycopg2.extensions.register_type">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">register_type</tt><big>(</big><em>obj</em><span class="optional">[</span>, <em>scope</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#psycopg2.extensions.register_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>Register a type caster created using <a title="psycopg2.extensions.new_type" class="reference internal" href="#psycopg2.extensions.new_type"><tt class="xref docutils literal"><span class="pre">new_type()</span></tt></a>.</p>
+<p>If <em>scope</em> is specified, it should be a <a title="connection" class="reference external" href="connection.html#connection"><tt class="xref docutils literal"><span class="pre">connection</span></tt></a> or a
+<a title="cursor" class="reference external" href="cursor.html#cursor"><tt class="xref docutils literal"><span class="pre">cursor</span></tt></a>: the type caster will be effective only limited to the
+specified object.  Otherwise it will be globally registered.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="psycopg2.extensions.string_types">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">string_types</tt><a class="headerlink" href="#psycopg2.extensions.string_types" title="Permalink to this definition">¶</a></dt>
+<dd>The global register of type casters.</dd></dl>
+
+<span class="target" id="index-352"></span><dl class="data">
+<dt id="psycopg2.extensions.encodings">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">encodings</tt><a class="headerlink" href="#psycopg2.extensions.encodings" title="Permalink to this definition">¶</a></dt>
+<dd>Mapping from <a class="reference external" href="http://www.postgresql.org/docs/8.4/static/multibyte.html">PostgreSQL encoding</a> names to <a class="reference external" href="http://docs.python.org/library/codecs.html#standard-encodings">Python codec</a> names.
+Used by Psycopg when adapting or casting unicode strings. See
+<a class="reference external" href="usage.html#unicode-handling"><em>Unicode handling</em></a>.</dd></dl>
+
+</div>
+<div class="section" id="additional-exceptions">
+<span id="index-353"></span><h2>Additional exceptions<a class="headerlink" href="#additional-exceptions" title="Permalink to this headline">¶</a></h2>
+<p>The module exports a few exceptions in addition to the <a class="reference external" href="module.html#dbapi-exceptions"><em>standard ones</em></a> defined by the <a class="reference external" href="http://www.python.org/dev/peps/pep-0249/">DB API 2.0</a>.</p>
+<dl class="exception">
+<dt id="psycopg2.extensions.QueryCanceledError">
+<em class="property">exception </em><tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">QueryCanceledError</tt><a class="headerlink" href="#psycopg2.extensions.QueryCanceledError" title="Permalink to this definition">¶</a></dt>
+<dd><p>(subclasses <a title="psycopg2.OperationalError" class="reference external" href="module.html#psycopg2.OperationalError"><tt class="xref docutils literal"><span class="pre">OperationalError</span></tt></a>)</p>
+<p>Error related to SQL query cancelation.  It can be trapped specifically to
+detect a timeout.</p>
+<p>
+<span class="versionmodified">New in version 2.0.7.</span></p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="psycopg2.extensions.TransactionRollbackError">
+<em class="property">exception </em><tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">TransactionRollbackError</tt><a class="headerlink" href="#psycopg2.extensions.TransactionRollbackError" title="Permalink to this definition">¶</a></dt>
+<dd><p>(subclasses <a title="psycopg2.OperationalError" class="reference external" href="module.html#psycopg2.OperationalError"><tt class="xref docutils literal"><span class="pre">OperationalError</span></tt></a>)</p>
+<p>Error causing transaction rollback (deadlocks, serialisation failures,
+etc).  It can be trapped specifically to detect a deadlock.</p>
+<p>
+<span class="versionmodified">New in version 2.0.7.</span></p>
+</dd></dl>
+
+</div>
+<div class="section" id="isolation-level-constants">
+<span id="index-354"></span><span id="id3"></span><h2>Isolation level constants<a class="headerlink" href="#isolation-level-constants" title="Permalink to this headline">¶</a></h2>
+<p>Psycopg2 <a title="connection" class="reference external" href="connection.html#connection"><tt class="xref docutils literal"><span class="pre">connection</span></tt></a> objects hold informations about the PostgreSQL
+<a class="reference external" href="http://www.postgresql.org/docs/8.4/static/transaction-iso.html">transaction isolation level</a>.  The current transaction level can be read
+from the <a title="connection.isolation_level" class="reference external" href="connection.html#connection.isolation_level"><tt class="xref docutils literal"><span class="pre">isolation_level</span></tt></a> attribute.  The default isolation
+level is <tt class="sql docutils literal"><span class="pre">READ</span> <span class="pre">COMMITTED</span></tt>.  A different isolation level con be set
+through the <a title="connection.set_isolation_level" class="reference external" href="connection.html#connection.set_isolation_level"><tt class="xref docutils literal"><span class="pre">set_isolation_level()</span></tt></a> method.  The level can be
+set to one of the following constants:</p>
+<dl class="data">
+<dt id="psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">ISOLATION_LEVEL_AUTOCOMMIT</tt><a class="headerlink" href="#psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT" title="Permalink to this definition">¶</a></dt>
+<dd><p>No transaction is started when command are issued and no
+<a title="connection.commit" class="reference external" href="connection.html#connection.commit"><tt class="xref docutils literal"><span class="pre">commit()</span></tt></a> or <a title="connection.rollback" class="reference external" href="connection.html#connection.rollback"><tt class="xref docutils literal"><span class="pre">rollback()</span></tt></a> is required.
+Some PostgreSQL command such as <tt class="sql docutils literal"><span class="pre">CREATE</span> <span class="pre">DATABASE</span></tt> or <tt class="sql docutils literal"><span class="pre">VACUUM</span></tt>
+can&#8217;t run into a transaction: to run such command use:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="o">.</span><span class="n">set_isolation_level</span><span class="p">(</span><span class="n">ISOLATION_LEVEL_AUTOCOMMIT</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See also <a class="reference external" href="usage.html#transactions-control"><em>Transactions control</em></a>.</p>
+</dd></dl>
+
+<dl class="data">
+<dt id="psycopg2.extensions.ISOLATION_LEVEL_READ_UNCOMMITTED">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">ISOLATION_LEVEL_READ_UNCOMMITTED</tt><a class="headerlink" href="#psycopg2.extensions.ISOLATION_LEVEL_READ_UNCOMMITTED" title="Permalink to this definition">¶</a></dt>
+<dd>The <tt class="sql docutils literal"><span class="pre">READ</span> <span class="pre">UNCOMMITTED</span></tt> isolation level is defined in the SQL standard
+but not available in the <abbr title="Multiversion concurrency control">MVCC</abbr> model of PostgreSQL: it is replaced by the
+stricter <tt class="sql docutils literal"><span class="pre">READ</span> <span class="pre">COMMITTED</span></tt>.</dd></dl>
+
+<dl class="data">
+<dt id="psycopg2.extensions.ISOLATION_LEVEL_READ_COMMITTED">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">ISOLATION_LEVEL_READ_COMMITTED</tt><a class="headerlink" href="#psycopg2.extensions.ISOLATION_LEVEL_READ_COMMITTED" title="Permalink to this definition">¶</a></dt>
+<dd>This is the default value.  A new transaction is started at the first
+<a title="cursor.execute" class="reference external" href="cursor.html#cursor.execute"><tt class="xref docutils literal"><span class="pre">execute()</span></tt></a> command on a cursor and at each new
+<tt class="xref docutils literal"><span class="pre">execute()</span></tt> after a <a title="connection.commit" class="reference external" href="connection.html#connection.commit"><tt class="xref docutils literal"><span class="pre">commit()</span></tt></a> or a
+<a title="connection.rollback" class="reference external" href="connection.html#connection.rollback"><tt class="xref docutils literal"><span class="pre">rollback()</span></tt></a>.  The transaction runs in the PostgreSQL
+<tt class="sql docutils literal"><span class="pre">READ</span> <span class="pre">COMMITTED</span></tt> isolation level.</dd></dl>
+
+<dl class="data">
+<dt id="psycopg2.extensions.ISOLATION_LEVEL_REPEATABLE_READ">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">ISOLATION_LEVEL_REPEATABLE_READ</tt><a class="headerlink" href="#psycopg2.extensions.ISOLATION_LEVEL_REPEATABLE_READ" title="Permalink to this definition">¶</a></dt>
+<dd>The <tt class="sql docutils literal"><span class="pre">REPEATABLE</span> <span class="pre">READ</span></tt> isolation level is defined in the SQL standard
+but not available in the <abbr title="Multiversion concurrency control">MVCC</abbr> model of PostgreSQL: it is replaced by the
+stricter <tt class="sql docutils literal"><span class="pre">SERIALIZABLE</span></tt>.</dd></dl>
+
+<dl class="data">
+<dt id="psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">ISOLATION_LEVEL_SERIALIZABLE</tt><a class="headerlink" href="#psycopg2.extensions.ISOLATION_LEVEL_SERIALIZABLE" title="Permalink to this definition">¶</a></dt>
+<dd>Transactions are run at a <tt class="sql docutils literal"><span class="pre">SERIALIZABLE</span></tt> isolation level. This is the
+strictest transactions isolation level, equivalent to having the
+transactions executed serially rather than concurrently. However
+applications using this level must be prepared to retry reansactions due
+to serialization failures. See <a class="reference external" href="http://www.postgresql.org/docs/8.4/static/transaction-iso.html#XACT-SERIALIZABLE">serializable isolation level</a> in
+PostgreSQL documentation.</dd></dl>
+
+</div>
+<div class="section" id="transaction-status-constants">
+<span id="index-355"></span><span id="id4"></span><h2>Transaction status constants<a class="headerlink" href="#transaction-status-constants" title="Permalink to this headline">¶</a></h2>
+<p>These values represent the possible status of a transaction: the current value
+can be read using the <a title="connection.get_transaction_status" class="reference external" href="connection.html#connection.get_transaction_status"><tt class="xref docutils literal"><span class="pre">connection.get_transaction_status()</span></tt></a> method.</p>
+<dl class="data">
+<dt id="psycopg2.extensions.TRANSACTION_STATUS_IDLE">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">TRANSACTION_STATUS_IDLE</tt><a class="headerlink" href="#psycopg2.extensions.TRANSACTION_STATUS_IDLE" title="Permalink to this definition">¶</a></dt>
+<dd>The session is idle and there is no current transaction.</dd></dl>
+
+<dl class="data">
+<dt id="psycopg2.extensions.TRANSACTION_STATUS_ACTIVE">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">TRANSACTION_STATUS_ACTIVE</tt><a class="headerlink" href="#psycopg2.extensions.TRANSACTION_STATUS_ACTIVE" title="Permalink to this definition">¶</a></dt>
+<dd>A command is currently in progress.</dd></dl>
+
+<dl class="data">
+<dt id="psycopg2.extensions.TRANSACTION_STATUS_INTRANS">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">TRANSACTION_STATUS_INTRANS</tt><a class="headerlink" href="#psycopg2.extensions.TRANSACTION_STATUS_INTRANS" title="Permalink to this definition">¶</a></dt>
+<dd>The session is idle in a valid transaction block.</dd></dl>
+
+<dl class="data">
+<dt id="psycopg2.extensions.TRANSACTION_STATUS_INERROR">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">TRANSACTION_STATUS_INERROR</tt><a class="headerlink" href="#psycopg2.extensions.TRANSACTION_STATUS_INERROR" title="Permalink to this definition">¶</a></dt>
+<dd>The session is idle in a failed transaction block.</dd></dl>
+
+<dl class="data">
+<dt id="psycopg2.extensions.TRANSACTION_STATUS_UNKNOWN">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">TRANSACTION_STATUS_UNKNOWN</tt><a class="headerlink" href="#psycopg2.extensions.TRANSACTION_STATUS_UNKNOWN" title="Permalink to this definition">¶</a></dt>
+<dd>Reported if the connection with the server is bad.</dd></dl>
+
+</div>
+<div class="section" id="connection-status-constants">
+<span id="index-356"></span><span id="id5"></span><h2>Connection status constants<a class="headerlink" href="#connection-status-constants" title="Permalink to this headline">¶</a></h2>
+<p>These values represent the possible status of a connection: the current value
+can be read from the <a title="connection.status" class="reference external" href="connection.html#connection.status"><tt class="xref docutils literal"><span class="pre">status</span></tt></a> attribute.</p>
+<p>It is possible to find the connection in other status than the one shown below.
+Those are the only states in which a working connection is expected to be found
+during the execution of regular Python client code: other states are for
+internal usage and Python code should not rely on them.</p>
+<dl class="data">
+<dt id="psycopg2.extensions.STATUS_READY">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">STATUS_READY</tt><a class="headerlink" href="#psycopg2.extensions.STATUS_READY" title="Permalink to this definition">¶</a></dt>
+<dd>Connection established. No transaction in progress.</dd></dl>
+
+<dl class="data">
+<dt id="psycopg2.extensions.STATUS_BEGIN">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">STATUS_BEGIN</tt><a class="headerlink" href="#psycopg2.extensions.STATUS_BEGIN" title="Permalink to this definition">¶</a></dt>
+<dd>Connection established. A transaction is currently in progress.</dd></dl>
+
+<dl class="data">
+<dt id="psycopg2.extensions.STATUS_IN_TRANSACTION">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">STATUS_IN_TRANSACTION</tt><a class="headerlink" href="#psycopg2.extensions.STATUS_IN_TRANSACTION" title="Permalink to this definition">¶</a></dt>
+<dd>An alias for <a title="psycopg2.extensions.STATUS_BEGIN" class="reference internal" href="#psycopg2.extensions.STATUS_BEGIN"><tt class="xref docutils literal"><span class="pre">STATUS_BEGIN</span></tt></a></dd></dl>
+
+</div>
+<div class="section" id="poll-constants">
+<span id="index-357"></span><span id="id6"></span><h2>Poll constants<a class="headerlink" href="#poll-constants" title="Permalink to this headline">¶</a></h2>
+<p>
+<span class="versionmodified">New in version 2.2.0.</span></p>
+<p>These values can be returned by <a title="connection.poll" class="reference external" href="connection.html#connection.poll"><tt class="xref docutils literal"><span class="pre">connection.poll()</span></tt></a> during asynchronous
+connection and communication.  They match the values in the libpq enum
+<tt class="xref docutils literal"><span class="pre">PostgresPollingStatusType</span></tt>.  See <a class="reference external" href="advanced.html#async-support"><em>Asynchronous support</em></a> and
+<a class="reference external" href="advanced.html#green-support"><em>Support to coroutine libraries</em></a>.</p>
+<dl class="data">
+<dt id="psycopg2.extensions.POLL_OK">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">POLL_OK</tt><a class="headerlink" href="#psycopg2.extensions.POLL_OK" title="Permalink to this definition">¶</a></dt>
+<dd>The data being read is available, or the file descriptor is ready for
+writing: reading or writing will not block.</dd></dl>
+
+<dl class="data">
+<dt id="psycopg2.extensions.POLL_READ">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">POLL_READ</tt><a class="headerlink" href="#psycopg2.extensions.POLL_READ" title="Permalink to this definition">¶</a></dt>
+<dd><p>Some data is being read from the backend, but it is not available yet on
+the client and reading would block.  Upon receiving this value, the client
+should wait for the connection file descriptor to be ready <em>for reading</em>.
+For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">select</span><span class="o">.</span><span class="n">select</span><span class="p">([</span><span class="n">conn</span><span class="o">.</span><span class="n">fileno</span><span class="p">()],</span> <span class="p">[],</span> <span class="p">[])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="psycopg2.extensions.POLL_WRITE">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">POLL_WRITE</tt><a class="headerlink" href="#psycopg2.extensions.POLL_WRITE" title="Permalink to this definition">¶</a></dt>
+<dd><p>Some data is being sent to the backend but the connection file descriptor
+can&#8217;t currently accept new data.  Upon receiving this value, the client
+should wait for the connection file descriptor to be ready <em>for writing</em>.
+For example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">select</span><span class="o">.</span><span class="n">select</span><span class="p">([],</span> <span class="p">[</span><span class="n">conn</span><span class="o">.</span><span class="n">fileno</span><span class="p">()],</span> <span class="p">[])</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="data">
+<dt id="psycopg2.extensions.POLL_ERROR">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">POLL_ERROR</tt><a class="headerlink" href="#psycopg2.extensions.POLL_ERROR" title="Permalink to this definition">¶</a></dt>
+<dd>There was a problem during connection polling. This value should actually
+never be returned: in case of poll error usually an exception containing
+the relevant details is raised.</dd></dl>
+
+</div>
+<div class="section" id="additional-database-types">
+<h2>Additional database types<a class="headerlink" href="#additional-database-types" title="Permalink to this headline">¶</a></h2>
+<p>The <tt class="xref docutils literal"><span class="pre">extensions</span></tt> module includes typecasters for many standard
+PostgreSQL types.  These objects allow the conversion of returned data into
+Python objects.  All the typecasters are automatically registered, except
+<a title="psycopg2.extensions.UNICODE" class="reference internal" href="#psycopg2.extensions.UNICODE"><tt class="xref docutils literal"><span class="pre">UNICODE</span></tt></a> and <a title="psycopg2.extensions.UNICODEARRAY" class="reference internal" href="#psycopg2.extensions.UNICODEARRAY"><tt class="xref docutils literal"><span class="pre">UNICODEARRAY</span></tt></a>: you can register them using
+<a title="psycopg2.extensions.register_type" class="reference internal" href="#psycopg2.extensions.register_type"><tt class="xref docutils literal"><span class="pre">register_type()</span></tt></a> in order to receive Unicode objects instead of strings
+from the database.  See <a class="reference external" href="usage.html#unicode-handling"><em>Unicode handling</em></a> for details.</p>
+<dl class="data">
+<dt id="psycopg2.extensions.BOOLEAN">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">BOOLEAN</tt><a class="headerlink" href="#psycopg2.extensions.BOOLEAN" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.DATE">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">DATE</tt><a class="headerlink" href="#psycopg2.extensions.DATE" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.DECIMAL">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">DECIMAL</tt><a class="headerlink" href="#psycopg2.extensions.DECIMAL" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.FLOAT">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">FLOAT</tt><a class="headerlink" href="#psycopg2.extensions.FLOAT" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.INTEGER">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">INTEGER</tt><a class="headerlink" href="#psycopg2.extensions.INTEGER" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.INTERVAL">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">INTERVAL</tt><a class="headerlink" href="#psycopg2.extensions.INTERVAL" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.LONGINTEGER">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">LONGINTEGER</tt><a class="headerlink" href="#psycopg2.extensions.LONGINTEGER" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.TIME">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">TIME</tt><a class="headerlink" href="#psycopg2.extensions.TIME" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.UNICODE">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">UNICODE</tt><a class="headerlink" href="#psycopg2.extensions.UNICODE" title="Permalink to this definition">¶</a></dt>
+<dd>Typecasters for basic types. Notice that a few other ones (<a title="psycopg2.BINARY" class="reference external" href="module.html#psycopg2.BINARY"><tt class="xref docutils literal"><span class="pre">BINARY</span></tt></a>,
+<a title="psycopg2.DATETIME" class="reference external" href="module.html#psycopg2.DATETIME"><tt class="xref docutils literal"><span class="pre">DATETIME</span></tt></a>, <a title="psycopg2.NUMBER" class="reference external" href="module.html#psycopg2.NUMBER"><tt class="xref docutils literal"><span class="pre">NUMBER</span></tt></a>, <a title="psycopg2.ROWID" class="reference external" href="module.html#psycopg2.ROWID"><tt class="xref docutils literal"><span class="pre">ROWID</span></tt></a>,
+<a title="psycopg2.STRING" class="reference external" href="module.html#psycopg2.STRING"><tt class="xref docutils literal"><span class="pre">STRING</span></tt></a>) are exposed by the <a title="" class="reference external" href="module.html#module-psycopg2"><tt class="xref docutils literal"><span class="pre">psycopg2</span></tt></a> module for <a class="reference external" href="http://www.python.org/dev/peps/pep-0249/">DB API 2.0</a>
+compliance.</dd></dl>
+
+<dl class="data">
+<dt id="psycopg2.extensions.BINARYARRAY">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">BINARYARRAY</tt><a class="headerlink" href="#psycopg2.extensions.BINARYARRAY" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.BOOLEANARRAY">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">BOOLEANARRAY</tt><a class="headerlink" href="#psycopg2.extensions.BOOLEANARRAY" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.DATEARRAY">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">DATEARRAY</tt><a class="headerlink" href="#psycopg2.extensions.DATEARRAY" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.DATETIMEARRAY">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">DATETIMEARRAY</tt><a class="headerlink" href="#psycopg2.extensions.DATETIMEARRAY" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.DECIMALARRAY">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">DECIMALARRAY</tt><a class="headerlink" href="#psycopg2.extensions.DECIMALARRAY" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.FLOATARRAY">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">FLOATARRAY</tt><a class="headerlink" href="#psycopg2.extensions.FLOATARRAY" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.INTEGERARRAY">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">INTEGERARRAY</tt><a class="headerlink" href="#psycopg2.extensions.INTEGERARRAY" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.INTERVALARRAY">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">INTERVALARRAY</tt><a class="headerlink" href="#psycopg2.extensions.INTERVALARRAY" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.LONGINTEGERARRAY">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">LONGINTEGERARRAY</tt><a class="headerlink" href="#psycopg2.extensions.LONGINTEGERARRAY" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.ROWIDARRAY">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">ROWIDARRAY</tt><a class="headerlink" href="#psycopg2.extensions.ROWIDARRAY" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.STRINGARRAY">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">STRINGARRAY</tt><a class="headerlink" href="#psycopg2.extensions.STRINGARRAY" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.TIMEARRAY">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">TIMEARRAY</tt><a class="headerlink" href="#psycopg2.extensions.TIMEARRAY" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.UNICODEARRAY">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">UNICODEARRAY</tt><a class="headerlink" href="#psycopg2.extensions.UNICODEARRAY" title="Permalink to this definition">¶</a></dt>
+<dd>Typecasters to convert arrays of sql types into Python lists.</dd></dl>
+
+<dl class="data">
+<dt id="psycopg2.extensions.PYDATE">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">PYDATE</tt><a class="headerlink" href="#psycopg2.extensions.PYDATE" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.PYDATETIME">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">PYDATETIME</tt><a class="headerlink" href="#psycopg2.extensions.PYDATETIME" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.PYINTERVAL">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">PYINTERVAL</tt><a class="headerlink" href="#psycopg2.extensions.PYINTERVAL" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.PYTIME">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">PYTIME</tt><a class="headerlink" href="#psycopg2.extensions.PYTIME" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.PYDATEARRAY">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">PYDATEARRAY</tt><a class="headerlink" href="#psycopg2.extensions.PYDATEARRAY" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.PYDATETIMEARRAY">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">PYDATETIMEARRAY</tt><a class="headerlink" href="#psycopg2.extensions.PYDATETIMEARRAY" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.PYINTERVALARRAY">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">PYINTERVALARRAY</tt><a class="headerlink" href="#psycopg2.extensions.PYINTERVALARRAY" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.PYTIMEARRAY">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">PYTIMEARRAY</tt><a class="headerlink" href="#psycopg2.extensions.PYTIMEARRAY" title="Permalink to this definition">¶</a></dt>
+<dd>Typecasters to convert time-related data types to Python <tt class="xref docutils literal"><span class="pre">datetime</span></tt>
+objects.</dd></dl>
+
+<dl class="data">
+<dt id="psycopg2.extensions.MXDATE">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">MXDATE</tt><a class="headerlink" href="#psycopg2.extensions.MXDATE" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.MXDATETIME">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">MXDATETIME</tt><a class="headerlink" href="#psycopg2.extensions.MXDATETIME" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.MXINTERVAL">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">MXINTERVAL</tt><a class="headerlink" href="#psycopg2.extensions.MXINTERVAL" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.MXTIME">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">MXTIME</tt><a class="headerlink" href="#psycopg2.extensions.MXTIME" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.MXDATEARRAY">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">MXDATEARRAY</tt><a class="headerlink" href="#psycopg2.extensions.MXDATEARRAY" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.MXDATETIMEARRAY">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">MXDATETIMEARRAY</tt><a class="headerlink" href="#psycopg2.extensions.MXDATETIMEARRAY" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.MXINTERVALARRAY">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">MXINTERVALARRAY</tt><a class="headerlink" href="#psycopg2.extensions.MXINTERVALARRAY" title="Permalink to this definition">¶</a></dt>
+<dt id="psycopg2.extensions.MXTIMEARRAY">
+<tt class="descclassname">psycopg2.extensions.</tt><tt class="descname">MXTIMEARRAY</tt><a class="headerlink" href="#psycopg2.extensions.MXTIMEARRAY" title="Permalink to this definition">¶</a></dt>
+<dd>Typecasters to convert time-related data types to <a class="reference external" href="http://www.egenix.com/products/python/mxBase/mxDateTime/">mx.DateTime</a> objects.
+Only available if Psycopg was compiled with <tt class="xref docutils literal"><span class="pre">mx</span></tt> support.</dd></dl>
+
+<p>
+<span class="versionmodified">Changed in version 2.2.0: </span>previously the <a title="psycopg2.extensions.DECIMAL" class="reference internal" href="#psycopg2.extensions.DECIMAL"><tt class="xref docutils literal"><span class="pre">DECIMAL</span></tt></a> typecaster and the specific time-related
+typecasters (<tt class="xref docutils literal"><span class="pre">PY*</span></tt> and <tt class="xref docutils literal"><span class="pre">MX*</span></tt>) were not exposed by the <tt class="xref docutils literal"><span class="pre">extensions</span></tt>
+module. In older versions they can be imported from the implementation
+module <tt class="xref docutils literal"><span class="pre">psycopg2._psycopg</span></tt>.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h3><a href="index.html">Table Of Contents</a></h3>
+            <ul>
+<li><a class="reference external" href="#"><tt class="docutils literal"><span class="pre">psycopg2.extensions</span></tt> &#8211; Extensions to the DB API</a><ul>
+<li><a class="reference external" href="#sql-adaptation-protocol-objects">SQL adaptation protocol objects</a></li>
+<li><a class="reference external" href="#database-types-casting-functions">Database types casting functions</a></li>
+<li><a class="reference external" href="#additional-exceptions">Additional exceptions</a></li>
+<li><a class="reference external" href="#isolation-level-constants">Isolation level constants</a></li>
+<li><a class="reference external" href="#transaction-status-constants">Transaction status constants</a></li>
+<li><a class="reference external" href="#connection-status-constants">Connection status constants</a></li>
+<li><a class="reference external" href="#poll-constants">Poll constants</a></li>
+<li><a class="reference external" href="#additional-database-types">Additional database types</a></li>
+</ul>
+</li>
+</ul>
+
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="advanced.html"
+                                  title="previous chapter">More advanced topics</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="tz.html"
+                                  title="next chapter"><tt class="docutils literal"><span class="pre">psycopg2.tz</span></tt> &#8211;  <tt class="docutils literal"><span class="pre">tzinfo</span></tt> implementations for Psycopg 2</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/extensions.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tz.html" title="psycopg2.tz – tzinfo implementations for Psycopg 2"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="advanced.html" title="More advanced topics"
+             >previous</a> |</li>
+        <li><a href="index.html">Psycopg v2.2.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2001-2010, Federico Di Gregorio. Documentation by Daniele Varrazzo.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.5.
+    </div>
+  </body>
+</html>

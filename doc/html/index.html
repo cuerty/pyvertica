@@ -1,0 +1,178 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Psycopg – PostgreSQL database adapter for Python &mdash; Psycopg v2.2.1 documentation</title>
+    <link rel="stylesheet" href="_static/psycopg.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '#',
+        VERSION:     '2.2.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Psycopg v2.2.1 documentation" href="#" />
+    <link rel="next" title="Basic module usage" href="usage.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Basic module usage"
+             accesskey="N">next</a> |</li>
+        <li><a href="#">Psycopg v2.2.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="psycopg-postgresql-database-adapter-for-python">
+<h1>Psycopg &#8211; PostgreSQL database adapter for Python<a class="headerlink" href="#psycopg-postgresql-database-adapter-for-python" title="Permalink to this headline">¶</a></h1>
+<p>Psycopg is a <a class="reference external" href="http://www.postgresql.org/">PostgreSQL</a> database adapter for the <a class="reference external" href="http://www.python.org/">Python</a> programming
+language.  Its main advantages are that it supports the full Python <a class="reference external" href="http://www.python.org/dev/peps/pep-0249/">DB API 2.0</a>
+and it is thread safe (threads can share the connections). It was designed for
+heavily multi-threaded applications that create and destroy lots of cursors and
+make a conspicuous number of concurrent <tt class="sql docutils literal"><span class="pre">INSERT</span></tt>s or <tt class="sql docutils literal"><span class="pre">UPDATE</span></tt>s.
+The psycopg distribution includes ZPsycopgDA, a <a class="reference external" href="http://www.zope.org/">Zope</a> Database Adapter.</p>
+<p>Psycopg 2 is an almost complete rewrite of the Psycopg 1.1.x branch. Psycopg 2
+features complete <a class="reference external" href="http://www.postgresql.org/docs/8.4/static/libpq.html">libpq</a> v3 protocol, <a class="reference external" href="http://www.postgresql.org/docs/8.4/static/sql-copy.html"><tt class="sql docutils literal"><span class="pre">COPY</span> <span class="pre">TO/COPY</span> <span class="pre">FROM</span></tt></a> and full <a class="reference external" href="usage.html#python-types-adaptation"><em>object
+adaptation</em></a> for all basic Python types: strings (including unicode), ints,
+longs, floats, buffers (binary objects), booleans, <a class="reference external" href="http://www.egenix.com/products/python/mxBase/mxDateTime/">mx.DateTime</a> and builtin
+datetime types. It also supports unicode queries and Python lists mapped to
+PostgreSQL arrays.</p>
+<p class="rubric">Contents</p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="usage.html">Basic module usage</a><ul>
+<li class="toctree-l2"><a class="reference external" href="usage.html#passing-parameters-to-sql-queries">Passing parameters to SQL queries</a></li>
+<li class="toctree-l2"><a class="reference external" href="usage.html#adaptation-of-python-values-to-sql-types">Adaptation of Python values to SQL types</a></li>
+<li class="toctree-l2"><a class="reference external" href="usage.html#transactions-control">Transactions control</a></li>
+<li class="toctree-l2"><a class="reference external" href="usage.html#server-side-cursors">Server side cursors</a></li>
+<li class="toctree-l2"><a class="reference external" href="usage.html#thread-safety">Thread safety</a></li>
+<li class="toctree-l2"><a class="reference external" href="usage.html#using-copy-to-and-copy-from">Using COPY TO and COPY FROM</a></li>
+<li class="toctree-l2"><a class="reference external" href="usage.html#access-to-postgresql-large-objects">Access to PostgreSQL large objects</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="module.html">The <tt class="docutils literal"><span class="pre">psycopg2</span></tt> module content</a><ul>
+<li class="toctree-l2"><a class="reference external" href="module.html#exceptions">Exceptions</a></li>
+<li class="toctree-l2"><a class="reference external" href="module.html#type-objects-and-constructors">Type Objects and Constructors</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="connection.html">The <tt class="docutils literal"><span class="pre">connection</span></tt> class</a></li>
+<li class="toctree-l1"><a class="reference external" href="cursor.html">The <tt class="docutils literal"><span class="pre">cursor</span></tt> class</a></li>
+<li class="toctree-l1"><a class="reference external" href="advanced.html">More advanced topics</a><ul>
+<li class="toctree-l2"><a class="reference external" href="advanced.html#connection-and-cursor-factories">Connection and cursor factories</a></li>
+<li class="toctree-l2"><a class="reference external" href="advanced.html#adapting-new-python-types-to-sql-syntax">Adapting new Python types to SQL syntax</a></li>
+<li class="toctree-l2"><a class="reference external" href="advanced.html#type-casting-of-sql-types-into-python-objects">Type casting of SQL types into Python objects</a></li>
+<li class="toctree-l2"><a class="reference external" href="advanced.html#asynchronous-notifications">Asynchronous notifications</a></li>
+<li class="toctree-l2"><a class="reference external" href="advanced.html#asynchronous-support">Asynchronous support</a></li>
+<li class="toctree-l2"><a class="reference external" href="advanced.html#support-to-coroutine-libraries">Support to coroutine libraries</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="extensions.html"><tt class="docutils literal"><span class="pre">psycopg2.extensions</span></tt> &#8211; Extensions to the DB API</a><ul>
+<li class="toctree-l2"><a class="reference external" href="extensions.html#sql-adaptation-protocol-objects">SQL adaptation protocol objects</a></li>
+<li class="toctree-l2"><a class="reference external" href="extensions.html#database-types-casting-functions">Database types casting functions</a></li>
+<li class="toctree-l2"><a class="reference external" href="extensions.html#additional-exceptions">Additional exceptions</a></li>
+<li class="toctree-l2"><a class="reference external" href="extensions.html#isolation-level-constants">Isolation level constants</a></li>
+<li class="toctree-l2"><a class="reference external" href="extensions.html#transaction-status-constants">Transaction status constants</a></li>
+<li class="toctree-l2"><a class="reference external" href="extensions.html#connection-status-constants">Connection status constants</a></li>
+<li class="toctree-l2"><a class="reference external" href="extensions.html#poll-constants">Poll constants</a></li>
+<li class="toctree-l2"><a class="reference external" href="extensions.html#additional-database-types">Additional database types</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="tz.html"><tt class="docutils literal"><span class="pre">psycopg2.tz</span></tt> &#8211;  <tt class="docutils literal"><span class="pre">tzinfo</span></tt> implementations for Psycopg 2</a></li>
+<li class="toctree-l1"><a class="reference external" href="pool.html"><tt class="docutils literal"><span class="pre">psycopg2.pool</span></tt> &#8211; Connections pooling</a></li>
+<li class="toctree-l1"><a class="reference external" href="extras.html"><tt class="docutils literal"><span class="pre">psycopg2.extras</span></tt> &#8211; Miscellaneous goodies for Psycopg 2</a><ul>
+<li class="toctree-l2"><a class="reference external" href="extras.html#dictionary-like-cursor">Dictionary-like cursor</a></li>
+<li class="toctree-l2"><a class="reference external" href="extras.html#logging-cursor">Logging cursor</a></li>
+<li class="toctree-l2"><a class="reference external" href="extras.html#uuid-data-type">UUID data type</a></li>
+<li class="toctree-l2"><a class="reference external" href="extras.html#inet-data-type"><tt class="sql docutils literal"><span class="pre">inet</span></tt> data type</a></li>
+<li class="toctree-l2"><a class="reference external" href="extras.html#fractional-time-zones">Fractional time zones</a></li>
+<li class="toctree-l2"><a class="reference external" href="extras.html#coroutine-support">Coroutine support</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference external" href="errorcodes.html"><tt class="docutils literal"><span class="pre">psycopg2.errorcodes</span></tt> &#8211; Error codes defined by PostgreSQL</a></li>
+<li class="toctree-l1"><a class="reference external" href="faq.html">Frequently Asked Questions</a><ul>
+<li class="toctree-l2"><a class="reference external" href="faq.html#problems-with-transactions-handling">Problems with transactions handling</a></li>
+<li class="toctree-l2"><a class="reference external" href="faq.html#problems-with-type-conversions">Problems with type conversions</a></li>
+<li class="toctree-l2"><a class="reference external" href="faq.html#best-practices">Best practices</a></li>
+<li class="toctree-l2"><a class="reference external" href="faq.html#problems-compiling-psycopg-from-source">Problems compiling Psycopg from source</a></li>
+</ul>
+</li>
+</ul>
+<p class="rubric">Indices and tables</p>
+<ul class="simple">
+<li><a class="reference external" href="genindex.html"><em>Index</em></a></li>
+<li><a class="reference external" href="search.html"><em>Search Page</em></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Next topic</h4>
+            <p class="topless"><a href="usage.html"
+                                  title="next chapter">Basic module usage</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/index.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="usage.html" title="Basic module usage"
+             >next</a> |</li>
+        <li><a href="#">Psycopg v2.2.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2001-2010, Federico Di Gregorio. Documentation by Daniele Varrazzo.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.5.
+    </div>
+  </body>
+</html>

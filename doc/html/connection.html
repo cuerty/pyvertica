@@ -1,0 +1,420 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>The connection class &mdash; Psycopg v2.2.1 documentation</title>
+    <link rel="stylesheet" href="_static/psycopg.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '#',
+        VERSION:     '2.2.1',
+        COLLAPSE_MODINDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Psycopg v2.2.1 documentation" href="index.html" />
+    <link rel="next" title="The cursor class" href="cursor.html" />
+    <link rel="prev" title="The psycopg2 module content" href="module.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             accesskey="M">modules</a> |</li>
+        <li class="right" >
+          <a href="cursor.html" title="The cursor class"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="module.html" title="The psycopg2 module content"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">Psycopg v2.2.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="the-connection-class">
+<h1>The <tt class="docutils literal"><span class="pre">connection</span></tt> class<a class="headerlink" href="#the-connection-class" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="connection">
+<em class="property">class </em><tt class="descname">connection</tt><a class="headerlink" href="#connection" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the connection to a PostgreSQL database instance. It encapsulates
+a database session.</p>
+<p>Connections are created using the factory function
+<a title="psycopg2.connect" class="reference external" href="module.html#psycopg2.connect"><tt class="xref docutils literal"><span class="pre">connect()</span></tt></a>.</p>
+<p>Connections are thread safe and can be shared among many thread. See
+<a class="reference external" href="usage.html#thread-safety"><em>Thread safety</em></a> for details.</p>
+<dl class="method">
+<dt id="connection.cursor">
+<tt class="descname">cursor</tt><big>(</big><span class="optional">[</span><em>name</em><span class="optional">]</span><span class="optional">[</span>, <em>cursor_factory</em><span class="optional">]</span><big>)</big><a class="headerlink" href="#connection.cursor" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new <a title="cursor" class="reference external" href="cursor.html#cursor"><tt class="xref docutils literal"><span class="pre">cursor</span></tt></a> object using the connection.</p>
+<p>If <tt class="xref docutils literal"><span class="pre">name</span></tt> is specified, the returned cursor will be a <em>server
+side</em> (or <em>named</em>) cursor. Otherwise the cursor will be <em>client side</em>.
+See <a class="reference external" href="usage.html#server-side-cursors"><em>Server side cursors</em></a> for further details.</p>
+<p>The <tt class="xref docutils literal"><span class="pre">cursor_factory</span></tt> argument can be used to create non-standard
+cursors. The class returned should be a subclass of
+<a title="psycopg2.extensions.cursor" class="reference external" href="extensions.html#psycopg2.extensions.cursor"><tt class="xref docutils literal"><span class="pre">psycopg2.extensions.cursor</span></tt></a>. See <a class="reference external" href="advanced.html#subclassing-cursor"><em>Connection and cursor factories</em></a> for
+details.</p>
+<div class="admonition-db-api-extension dbapi-extension admonition ">
+<p class="first admonition-title">DB API extension</p>
+<p class="last">The <tt class="xref docutils literal"><span class="pre">name</span></tt> and <tt class="xref docutils literal"><span class="pre">cursor_factory</span></tt> parameters are Psycopg
+extensions to the DB API 2.0.</p>
+</div>
+</dd></dl>
+
+<span class="target" id="index-337"></span><dl class="method">
+<dt id="connection.commit">
+<tt class="descname">commit</tt><big>(</big><big>)</big><a class="headerlink" href="#connection.commit" title="Permalink to this definition">¶</a></dt>
+<dd>Commit any pending transaction to the database. Psycopg can be set to
+perform automatic commits at each operation, see
+<a title="connection.set_isolation_level" class="reference internal" href="#connection.set_isolation_level"><tt class="xref docutils literal"><span class="pre">set_isolation_level()</span></tt></a>.</dd></dl>
+
+<span class="target" id="index-338"></span><dl class="method">
+<dt id="connection.rollback">
+<tt class="descname">rollback</tt><big>(</big><big>)</big><a class="headerlink" href="#connection.rollback" title="Permalink to this definition">¶</a></dt>
+<dd>Roll back to the start of any pending transaction.  Closing a
+connection without committing the changes first will cause an implicit
+rollback to be performed.</dd></dl>
+
+<dl class="method">
+<dt id="connection.close">
+<tt class="descname">close</tt><big>(</big><big>)</big><a class="headerlink" href="#connection.close" title="Permalink to this definition">¶</a></dt>
+<dd>Close the connection now (rather than whenever <tt class="xref docutils literal"><span class="pre">__del__()</span></tt> is
+called).  The connection will be unusable from this point forward; an
+<a title="psycopg2.InterfaceError" class="reference external" href="module.html#psycopg2.InterfaceError"><tt class="xref docutils literal"><span class="pre">InterfaceError</span></tt></a> will be raised if any operation is
+attempted with the connection.  The same applies to all cursor objects
+trying to use the connection.  Note that closing a connection without
+committing the changes first will cause an implicit rollback to be
+performed (unless a different isolation level has been selected: see
+<a title="connection.set_isolation_level" class="reference internal" href="#connection.set_isolation_level"><tt class="xref docutils literal"><span class="pre">set_isolation_level()</span></tt></a>).</dd></dl>
+
+<p class="rubric" id="index-339">Excetptions as connection class attributes</p>
+<p>The <tt class="xref docutils literal"><span class="pre">connection</span></tt> also exposes as attributes the same exceptions
+available in the <a title="" class="reference external" href="module.html#module-psycopg2"><tt class="xref docutils literal"><span class="pre">psycopg2</span></tt></a> module.  See <a class="reference external" href="module.html#dbapi-exceptions"><em>Exceptions</em></a>.</p>
+<div class="admonition-db-api-extension dbapi-extension admonition ">
+<p class="first admonition-title">DB API extension</p>
+<p class="last">The above methods are the only ones defined by the DB API 2.0 protocol.
+The Psycopg connection objects exports the following additional
+methods and attributes.</p>
+</div>
+<dl class="attribute">
+<dt id="connection.closed">
+<tt class="descname">closed</tt><a class="headerlink" href="#connection.closed" title="Permalink to this definition">¶</a></dt>
+<dd>Read-only attribute reporting whether the database connection is open
+(0) or closed (1).</dd></dl>
+
+<dl class="method">
+<dt id="connection.reset">
+<tt class="descname">reset</tt><big>(</big><big>)</big><a class="headerlink" href="#connection.reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reset the connection to the default.</p>
+<p>The method rolls back an eventual pending transaction and executes the
+PostgreSQL <a class="reference external" href="http://www.postgresql.org/docs/8.4/static/sql-reset.html"><tt class="sql docutils literal"><span class="pre">RESET</span></tt></a> and <a class="reference external" href="http://www.postgresql.org/docs/8.4/static/sql-set-session-authorization.html"><tt class="sql docutils literal"><span class="pre">SET</span> <span class="pre">SESSION</span> <span class="pre">AUTHORIZATION</span></tt></a> to revert the
+session to the default values.</p>
+<p>
+<span class="versionmodified">New in version 2.0.12.</span></p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connection.dsn">
+<tt class="descname">dsn</tt><a class="headerlink" href="#connection.dsn" title="Permalink to this definition">¶</a></dt>
+<dd>Read-only string containing the connection string used by the
+connection.</dd></dl>
+
+<span class="target" id="autocommit"><span id="index-340"></span></span><dl class="attribute">
+<dt id="connection.isolation_level">
+<tt class="descname">isolation_level</tt><a class="headerlink" href="#connection.isolation_level" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connection.set_isolation_level">
+<tt class="descname">set_isolation_level</tt><big>(</big><em>level</em><big>)</big><a class="headerlink" href="#connection.set_isolation_level" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read or set the <a class="reference external" href="http://www.postgresql.org/docs/8.4/static/transaction-iso.html">transaction isolation level</a> for the current session.
+The level defines the different phenomena that can happen in the
+database between concurrent transactions.</p>
+<p>The value set or read is an integer: symbolic constants are defined in
+the module <a title="" class="reference external" href="extensions.html#module-psycopg2.extensions"><tt class="xref docutils literal"><span class="pre">psycopg2.extensions</span></tt></a>: see
+<a class="reference external" href="extensions.html#isolation-level-constants"><em>Isolation level constants</em></a> for the available values.</p>
+<p>The default level is <tt class="sql docutils literal"><span class="pre">READ</span> <span class="pre">COMMITTED</span></tt>: at this level a
+transaction is automatically started the first time a database command
+is executed.  If you want an <em>autocommit</em> mode, switch to
+<a title="psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT" class="reference external" href="extensions.html#psycopg2.extensions.ISOLATION_LEVEL_AUTOCOMMIT"><tt class="xref docutils literal"><span class="pre">ISOLATION_LEVEL_AUTOCOMMIT</span></tt></a> before
+executing any command:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">conn</span><span class="o">.</span><span class="n">set_isolation_level</span><span class="p">(</span><span class="n">psycopg2</span><span class="o">.</span><span class="n">extensions</span><span class="o">.</span><span class="n">ISOLATION_LEVEL_AUTOCOMMIT</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>See also <a class="reference external" href="usage.html#transactions-control"><em>Transactions control</em></a>.</p>
+</dd></dl>
+
+<span class="target" id="index-341"></span><dl class="attribute">
+<dt id="connection.encoding">
+<tt class="descname">encoding</tt><a class="headerlink" href="#connection.encoding" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="connection.set_client_encoding">
+<tt class="descname">set_client_encoding</tt><big>(</big><em>enc</em><big>)</big><a class="headerlink" href="#connection.set_client_encoding" title="Permalink to this definition">¶</a></dt>
+<dd>Read or set the client encoding for the current session. The default
+is the encoding defined by the database. It should be one of the
+<a class="reference external" href="http://www.postgresql.org/docs/8.4/static/multibyte.html">characters set supported by PostgreSQL</a></dd></dl>
+
+<span class="target" id="index-342"></span><dl class="attribute">
+<dt id="connection.notices">
+<tt class="descname">notices</tt><a class="headerlink" href="#connection.notices" title="Permalink to this definition">¶</a></dt>
+<dd><p>A list containing all the database messages sent to the client during
+the session.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">cur</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s">&quot;CREATE TABLE foo (id serial PRIMARY KEY);&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">pprint</span><span class="p">(</span><span class="n">conn</span><span class="o">.</span><span class="n">notices</span><span class="p">)</span>
+<span class="go">[&#39;NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index &quot;foo_pkey&quot; for table &quot;foo&quot;\n&#39;,</span>
+<span class="go"> &#39;NOTICE:  CREATE TABLE will create implicit sequence &quot;foo_id_seq&quot; for serial column &quot;foo.id&quot;\n&#39;]</span>
+</pre></div>
+</div>
+<p>To avoid a leak in case excessive notices are generated, only the last
+50 messages are kept.</p>
+<p>You can configure what messages to receive using <a class="reference external" href="http://www.postgresql.org/docs/8.4/static/runtime-config-logging.html">PostgreSQL logging
+configuration parameters</a> such as <tt class="docutils literal"><span class="pre">log_statement</span></tt>,
+<tt class="docutils literal"><span class="pre">client_min_messages</span></tt>, <tt class="docutils literal"><span class="pre">log_min_duration_statement</span></tt> etc.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="connection.notifies">
+<tt class="descname">notifies</tt><a class="headerlink" href="#connection.notifies" title="Permalink to this definition">¶</a></dt>
+<dd><p>List containing asynchronous notifications received by the session.</p>
+<p>Received notifications have the form of a 2 items tuple
+<tt class="docutils literal"><span class="pre">(</span><em><span class="pre">pid</span></em><span class="pre">,</span><em><span class="pre">name</span></em><span class="pre">)</span></tt>, where <tt class="docutils literal"><em><span class="pre">pid</span></em></tt> is the PID of the backend
+that sent the notification and <tt class="docutils literal"><em><span class="pre">name</span></em></tt> is the signal name
+specified in the <tt class="sql docutils literal"><span class="pre">NOTIFY</span></tt> command.</p>
+<p>For other details see <a class="reference external" href="advanced.html#async-notify"><em>Asynchronous notifications</em></a>.</p>
+</dd></dl>
+
+<span class="target" id="index-343"></span><dl class="method">
+<dt id="connection.get_backend_pid">
+<tt class="descname">get_backend_pid</tt><big>(</big><big>)</big><a class="headerlink" href="#connection.get_backend_pid" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the process ID (PID) of the backend server process handling
+this connection.</p>
+<p>Note that the PID belongs to a process executing on the database
+server host, not the local host!</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">libpq docs for <a class="reference external" href="http://www.postgresql.org/docs/8.4/static/libpq-status.html#AEN33590">PQbackendPID()</a> for details.</p>
+</div>
+<p>
+<span class="versionmodified">New in version 2.0.8.</span></p>
+</dd></dl>
+
+<span class="target" id="index-344"></span><dl class="method">
+<dt id="connection.get_parameter_status">
+<tt class="descname">get_parameter_status</tt><big>(</big><em>parameter</em><big>)</big><a class="headerlink" href="#connection.get_parameter_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Look up a current parameter setting of the server.</p>
+<p>Potential values for <tt class="docutils literal"><span class="pre">parameter</span></tt> are: <tt class="docutils literal"><span class="pre">server_version</span></tt>,
+<tt class="docutils literal"><span class="pre">server_encoding</span></tt>, <tt class="docutils literal"><span class="pre">client_encoding</span></tt>, <tt class="docutils literal"><span class="pre">is_superuser</span></tt>,
+<tt class="docutils literal"><span class="pre">session_authorization</span></tt>, <tt class="docutils literal"><span class="pre">DateStyle</span></tt>, <tt class="docutils literal"><span class="pre">TimeZone</span></tt>,
+<tt class="docutils literal"><span class="pre">integer_datetimes</span></tt>, and <tt class="docutils literal"><span class="pre">standard_conforming_strings</span></tt>.</p>
+<p>If server did not report requested parameter, return <tt class="xref docutils literal"><span class="pre">None</span></tt>.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">libpq docs for <a class="reference external" href="http://www.postgresql.org/docs/8.4/static/libpq-status.html#AEN33499">PQparameterStatus()</a> for details.</p>
+</div>
+<p>
+<span class="versionmodified">New in version 2.0.12.</span></p>
+</dd></dl>
+
+<span class="target" id="index-345"></span><dl class="method">
+<dt id="connection.get_transaction_status">
+<tt class="descname">get_transaction_status</tt><big>(</big><big>)</big><a class="headerlink" href="#connection.get_transaction_status" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the current session transaction status as an integer.  Symbolic
+constants for the values are defined in the module
+<a title="" class="reference external" href="extensions.html#module-psycopg2.extensions"><tt class="xref docutils literal"><span class="pre">psycopg2.extensions</span></tt></a>: see <a class="reference external" href="extensions.html#transaction-status-constants"><em>Transaction status constants</em></a>
+for the available values.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">libpq docs for <a class="reference external" href="http://www.postgresql.org/docs/8.4/static/libpq-status.html#AEN33480">PQtransactionStatus()</a> for details.</p>
+</div>
+</dd></dl>
+
+<span class="target" id="index-346"></span><dl class="attribute">
+<dt id="connection.protocol_version">
+<tt class="descname">protocol_version</tt><a class="headerlink" href="#connection.protocol_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>A read-only integer representing frontend/backend protocol being used.
+It can be 2 or 3.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">libpq docs for <a class="reference external" href="http://www.postgresql.org/docs/8.4/static/libpq-status.html#AEN33546">PQprotocolVersion()</a> for details.</p>
+</div>
+<p>
+<span class="versionmodified">New in version 2.0.12.</span></p>
+</dd></dl>
+
+<span class="target" id="index-347"></span><dl class="attribute">
+<dt id="connection.server_version">
+<tt class="descname">server_version</tt><a class="headerlink" href="#connection.server_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>A read-only integer representing the backend version.</p>
+<p>The number is formed by converting the major, minor, and revision
+numbers into two-decimal-digit numbers and appending them together.
+For example, version 8.1.5 will be returned as <tt class="docutils literal"><span class="pre">80105</span></tt>.</p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last">libpq docs for <a class="reference external" href="http://www.postgresql.org/docs/8.4/static/libpq-status.html#AEN33556">PQserverVersion()</a> for details.</p>
+</div>
+<p>
+<span class="versionmodified">New in version 2.0.12.</span></p>
+</dd></dl>
+
+<span class="target" id="index-348"></span><dl class="attribute">
+<dt id="connection.status">
+<tt class="descname">status</tt><a class="headerlink" href="#connection.status" title="Permalink to this definition">¶</a></dt>
+<dd>A read-only integer representing the status of the connection.
+Symbolic constants for the values are defined in the module
+<a title="" class="reference external" href="extensions.html#module-psycopg2.extensions"><tt class="xref docutils literal"><span class="pre">psycopg2.extensions</span></tt></a>: see <a class="reference external" href="extensions.html#connection-status-constants"><em>Connection status constants</em></a>
+for the available values.</dd></dl>
+
+<dl class="method">
+<dt id="connection.lobject">
+<tt class="descname">lobject</tt><big>(</big><span class="optional">[</span><em>oid</em><span class="optional">[</span>, <em>mode</em><span class="optional">[</span>, <em>new_oid</em><span class="optional">[</span>, <em>new_file</em><span class="optional">[</span>, <em>lobject_factory</em><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><span class="optional">]</span><big>)</big><a class="headerlink" href="#connection.lobject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a new database large object. See <a class="reference external" href="usage.html#large-objects"><em>Access to PostgreSQL large objects</em></a> for an
+overview.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><em>oid</em> &#8211; The OID of the object to read or write. 0 to create
+a new large object and and have its OID assigned automatically.</li>
+<li><em>mode</em> &#8211; Access mode to the object: can be <tt class="docutils literal"><span class="pre">r</span></tt>, <tt class="docutils literal"><span class="pre">w</span></tt>,
+<tt class="docutils literal"><span class="pre">rw</span></tt> or <tt class="docutils literal"><span class="pre">n</span></tt> (meaning don&#8217;t open it).</li>
+<li><em>new_oid</em> &#8211; Create a new object using the specified OID. The
+function raises <tt class="xref docutils literal"><span class="pre">OperationalError</span></tt> if the OID is already in
+use. Default is 0, meaning assign a new one automatically.</li>
+<li><em>new_file</em> &#8211; The name of a file to be imported in the the database
+(using the <a class="reference external" href="http://www.postgresql.org/docs/8.4/static/lo-interfaces.html#AEN36307"><tt class="xref docutils literal"><span class="pre">lo_import()</span></tt></a> function)</li>
+<li><em>lobject_factory</em> &#8211; Subclass of
+<a title="psycopg2.extensions.lobject" class="reference external" href="extensions.html#psycopg2.extensions.lobject"><tt class="xref docutils literal"><span class="pre">lobject</span></tt></a> to be instantiated.</li>
+</ul>
+</td>
+</tr>
+<tr class="field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last"><a title="psycopg2.extensions.lobject" class="reference external" href="extensions.html#psycopg2.extensions.lobject"><tt class="xref docutils literal"><span class="pre">lobject</span></tt></a></p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>
+<span class="versionmodified">New in version 2.0.8.</span></p>
+</dd></dl>
+
+<p class="rubric">Methods related to asynchronous support.</p>
+<p>
+<span class="versionmodified">New in version 2.2.0.</span></p>
+<div class="admonition-see-also admonition seealso">
+<p class="first admonition-title">See also</p>
+<p class="last"><a class="reference external" href="advanced.html#async-support"><em>Asynchronous support</em></a> and <a class="reference external" href="advanced.html#green-support"><em>Support to coroutine libraries</em></a>.</p>
+</div>
+<dl class="attribute">
+<dt id="connection.async">
+<tt class="descname">async</tt><a class="headerlink" href="#connection.async" title="Permalink to this definition">¶</a></dt>
+<dd>Read only attribute: 1 if the connection is asynchronous, 0 otherwse.</dd></dl>
+
+<dl class="method">
+<dt id="connection.poll">
+<tt class="descname">poll</tt><big>(</big><big>)</big><a class="headerlink" href="#connection.poll" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used during an asynchronous connection attempt, or when a cursor is
+executing a query on an asynchronous connection, make communication
+proceed if it wouldn&#8217;t block.</p>
+<p>Return one of the constants defined in <a class="reference external" href="extensions.html#poll-constants"><em>Poll constants</em></a>. If it
+returns <a title="psycopg2.extensions.POLL_OK" class="reference external" href="extensions.html#psycopg2.extensions.POLL_OK"><tt class="xref docutils literal"><span class="pre">POLL_OK</span></tt></a> then the connection has been
+estabilished or the query results are available on the client.
+Otherwise wait until the file descriptor returned by <a title="connection.fileno" class="reference internal" href="#connection.fileno"><tt class="xref docutils literal"><span class="pre">fileno()</span></tt></a> is
+ready to read or to write, as explained in <a class="reference external" href="advanced.html#async-support"><em>Asynchronous support</em></a>.
+<a title="connection.poll" class="reference internal" href="#connection.poll"><tt class="xref docutils literal"><span class="pre">poll()</span></tt></a> should be also used by the function installed by
+<a title="psycopg2.extensions.set_wait_callback" class="reference external" href="extensions.html#psycopg2.extensions.set_wait_callback"><tt class="xref docutils literal"><span class="pre">set_wait_callback()</span></tt></a> as explained in
+<a class="reference external" href="advanced.html#green-support"><em>Support to coroutine libraries</em></a>.</p>
+<p><a title="connection.poll" class="reference internal" href="#connection.poll"><tt class="xref docutils literal"><span class="pre">poll()</span></tt></a> is also used to receive asynchronous notifications from the
+database: see <a class="reference external" href="advanced.html#async-notify"><em>Asynchronous notifications</em></a> from further details.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="connection.fileno">
+<tt class="descname">fileno</tt><big>(</big><big>)</big><a class="headerlink" href="#connection.fileno" title="Permalink to this definition">¶</a></dt>
+<dd>Return the file descriptor underlying the connection: useful to read
+its status during asynchronous communication.</dd></dl>
+
+<dl class="method">
+<dt id="connection.isexecuting">
+<tt class="descname">isexecuting</tt><big>(</big><big>)</big><a class="headerlink" href="#connection.isexecuting" title="Permalink to this definition">¶</a></dt>
+<dd>Return <tt class="xref xref docutils literal"><span class="pre">True</span></tt> if the connection is executing an asynchronous operation.</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+            <h4>Previous topic</h4>
+            <p class="topless"><a href="module.html"
+                                  title="previous chapter">The <tt class="docutils literal"><span class="pre">psycopg2</span></tt> module content</a></p>
+            <h4>Next topic</h4>
+            <p class="topless"><a href="cursor.html"
+                                  title="next chapter">The <tt class="docutils literal docutils literal"><span class="pre">cursor</span></tt> class</a></p>
+            <h3>This Page</h3>
+            <ul class="this-page-menu">
+              <li><a href="_sources/connection.txt"
+                     rel="nofollow">Show Source</a></li>
+            </ul>
+          <div id="searchbox" style="display: none">
+            <h3>Quick search</h3>
+              <form class="search" action="search.html" method="get">
+                <input type="text" name="q" size="18" />
+                <input type="submit" value="Go" />
+                <input type="hidden" name="check_keywords" value="yes" />
+                <input type="hidden" name="area" value="default" />
+              </form>
+              <p class="searchtip" style="font-size: 90%">
+              Enter search terms or a module, class or function name.
+              </p>
+          </div>
+          <script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="modindex.html" title="Global Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="cursor.html" title="The cursor class"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="module.html" title="The psycopg2 module content"
+             >previous</a> |</li>
+        <li><a href="index.html">Psycopg v2.2.1 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+      &copy; Copyright 2001-2010, Federico Di Gregorio. Documentation by Daniele Varrazzo.
+      Created using <a href="http://sphinx.pocoo.org/">Sphinx</a> 0.6.5.
+    </div>
+  </body>
+</html>
