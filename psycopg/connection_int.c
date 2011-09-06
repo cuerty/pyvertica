@@ -280,6 +280,10 @@ conn_setup(connectionObject *self, PGconn *pgconn)
         pgres = psyco_exec_green(self, psyco_datestyle);
     }
 
+    if (self->server_version == 0 && self->protocol == 3) { /* vertica */
+      self->encoding = strdup("UTF8");
+      self->isolation_level = 0;
+    } else {
     if (pgres == NULL || PQresultStatus(pgres) != PGRES_COMMAND_OK ) {
         PyErr_SetString(OperationalError, "can't set datestyle to ISO");
         IFCLEARPGRES(pgres);
@@ -335,7 +339,7 @@ conn_setup(connectionObject *self, PGconn *pgconn)
         return -1;
     }
     self->isolation_level = conn_get_isolation_level(pgres);
-
+    }
     Py_UNBLOCK_THREADS;
     pthread_mutex_unlock(&self->lock);
     Py_END_ALLOW_THREADS;
